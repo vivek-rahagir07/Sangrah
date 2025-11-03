@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sangrah - BMU Campus Community</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Noto Sans Devanagari for Hindi -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Apply Noto Sans Devanagari to Hindi text */
+        .hindi {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-weight: 500; /* Adjust as needed */
+        }
+        
+        /* Scroll Animations */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sangrah-blue': {
+                            DEFAULT: '#2563eb', // blue-600
+                            light: '#bfdbfe',   // blue-200
+                            dark: '#1d4ed8',    // blue-700
+                        },
+                        'sangrah-gold': {
+                            DEFAULT: '#f59e0b', // amber-500
+                            light: '#fef3c7',   // amber-100
+                            dark: '#b45309',    // amber-700
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-3xl font-extrabold text-sangrah-blue">
+                <span data-lang="en">Sangrah</span>
+                <span data-lang="hi" class="hidden hindi">संग्रह</span>
+            </a>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
+                    <span data-lang="en">About Us</span>
+                    <span data-lang="hi" class="hidden hindi">हमारे बारे में</span>
+                </a>
+                <a href="#mission" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
+                    <span data-lang="en">Our Mission</span>
+                    <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
+                </a>
+                <a href="#gallery" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
+                    <span data-lang="en">Gallery</span>
+                    <span data-lang="hi" class="hidden hindi">गैलरी</span>
+                </a>
+                <a href="#join" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
+                    <span data-lang="en">Get Involved</span>
+                    <span data-lang="hi" class="hidden hindi">शामिल हों</span>
+                </a>
+                <a href="#report" class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-2 px-4 rounded-lg shadow transition duration-300 hover:shadow-lg hover:-translate-y-0.5">
+                    <span data-lang="en">Report an Issue</span>
+                    <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
+                </a>
+                <!-- Language Toggle Button -->
+                <button id="lang-toggle" class="text-gray-600 hover:text-sangrah-blue transition duration-300 font-semibold py-1 px-2 border border-gray-300 rounded-md text-sm">
+                    <span data-lang="en">हिंदी में देखें</span>
+                    <span data-lang="hi" class="hidden">View in English</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t">
+            <a href="#about" class="block py-3 px-4 text-gray-600 hover:bg-gray-100">
+                <span data-lang="en">About Us</span>
+                <span data-lang="hi" class="hidden hindi">हमारे बारे में</span>
+            </a>
+            <a href="#mission" class="block py-3 px-4 text-gray-600 hover:bg-gray-100">
+                <span data-lang="en">Our Mission</span>
+                <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
+            </a>
+            <a href="#gallery" class="block py-3 px-4 text-gray-600 hover:bg-gray-100">
+                <span data-lang="en">Gallery</span>
+                <span data-lang="hi" class="hidden hindi">गैलरी</span>
+            </a>
+            <a href="#join" class="block py-3 px-4 text-gray-600 hover:bg-gray-100">
+                <span data-lang="en">Get Involved</span>
+                <span data-lang="hi" class="hidden hindi">शामिल हों</span>
+            </a>
+            <a href="#report" class="block py-3 px-6 text-center bg-sangrah-gold text-white font-bold m-4 rounded-lg">
+                <span data-lang="en">Report an Issue</span>
+                <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
+            </a>
+            <!-- Mobile Language Toggle -->
+            <button id="mobile-lang-toggle" class="block w-full text-left py-3 px-4 text-gray-600 hover:bg-gray-100 font-semibold">
+                <span data-lang="en">हिंदी में देखें</span>
+                <span data-lang="hi" class="hidden">View in English</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <section class="bg-sangrah-blue text-white py-20 md:py-32">
+            <div class="container mx-auto max-w-6xl px-4 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                    <span data-lang="en">Support & Solidarity on Campus</span>
+                    <span data-lang="hi" class="hidden hindi font-bold">कैंपस में समर्थन और एकजुटता</span>
+                </h1>
+                <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-10">
+                    <span data-lang="en">We are Sangrah, a BMU student community dedicated to ensuring the rights, respect, and well-being of every worker on our campus.</span>
+                    <span data-lang="hi" class="hidden hindi">हम संग्रह हैं, एक बीएमयू छात्र समुदाय जो हमारे कैंपस के हर कार्यकर्ता के अधिकारों, सम्मान और कल्याण को सुनिश्चित करने के लिए समर्पित है।</span>
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#report" class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg hover:shadow-xl hover:-translate-y-0.5">
+                        <span data-lang="en">Report an Issue Safely</span>
+                        <span data-lang="hi" class="hidden hindi font-normal">सुरक्षित रूप से समस्या की रिपोर्ट करें</span>
+                    </a>
+                    <a href="#about" class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg hover:shadow-xl hover:-translate-y-0.5">
+                        <span data-lang="en">Learn More About Us</span>
+                        <span data-lang="hi" class="hidden hindi font-normal">हमारे बारे में और जानें</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us (Acronym) Section -->
+        <section id="about" class="py-20 bg-white fade-in-section">
+            <div class="container mx-auto max-w-6xl px-4">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                            <span data-lang="en">Who We Are</span>
+                            <span data-lang="hi" class="hidden hindi">हम कौन हैं</span>
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-4" data-lang="en">
+                            "Sangrah" (संग्रह) means "collection" or "community." We are a collection of students standing in solidarity with the campus workers who form the backbone of our university.
+                        </p>
+                        <p class="text-lg text-gray-700 mb-6 hindi hidden" data-lang="hi">
+                            "संग्रह" का अर्थ है "एकत्र करना" या "समुदाय"। हम उन कैंपस कार्यकर्ताओं के साथ एकजुटता से खड़े छात्रों का एक संग्रह हैं जो हमारे विश्वविद्यालय की रीढ़ हैं।
+                        </p>
+                        <p class="text-lg text-gray-600 mb-4" data-lang="en">
+                            Our mission is built on a foundation of empathy and action. We believe that every member of the BMU community deserves to be treated with dignity, paid fairly, and given a safe space to be heard.
+                        </p>
+                         <p class="text-lg text-gray-700 mb-6 hindi hidden" data-lang="hi">
+                            हमारा मिशन सहानुभूति और कार्रवाई की नींव पर बना है। हमारा मानना है कि बीएमयू समुदाय के प्रत्येक सदस्य को सम्मान के साथ व्यवहार करने, उचित भुगतान पाने और अपनी बात रखने के लिए एक सुरक्षित स्थान पाने का अधिकार है।
+                        </p>
+                    </div>
+                    <!-- Acronym List -->
+                    <div class="space-y-4">
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">S</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Support & Solidarity</span>
+                                    <span data-lang="hi" class="hidden hindi">समर्थन और एकजुटता</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Standing together with our campus workers.</span>
+                                    <span data-lang="hi" class="hidden hindi">हमारे कैंपस कार्यकर्ताओं के साथ खड़े रहना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">A</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Advocacy for Worker Rights</span>
+                                    <span data-lang="hi" class="hidden hindi">कार्यकर्ता अधिकारों की वकालत</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Championing fair pay, respect, and safe conditions.</span>
+                                    <span data-lang="hi" class="hidden hindi">उचित वेतन, सम्मान और सुरक्षित स्थितियों की वकालत करना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">N</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Nurturing the Campus Community</span>
+                                    <span data-lang="hi" class="hidden hindi">कैंपस समुदाय का पोषण</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Fostering a sense of belonging for everyone.</span>
+                                    <span data-lang="hi" class="hidden hindi">सभी के लिए अपनेपन की भावना को बढ़ावा देना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">G</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Guiding Growth and Development</span>
+                                    <span data-lang="hi" class="hidden hindi">विकास में मार्गदर्शन</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Helping our community grow with empathy.</span>
+                                    <span data-lang="hi" class="hidden hindi">हमारे समुदाय को सहानुभूति के साथ बढ़ने में मदद करना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">R</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Respect and Relationship Building</span>
+                                    <span data-lang="hi" class="hidden hindi">सम्मान और संबंध बनाना</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Bridging the gap between students and workers.</span>
+                                    <span data-lang="hi" class="hidden hindi">छात्रों और कार्यकर्ताओं के बीच की खाई को पाटना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">A</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Action with Awareness</span>
+                                    <span data-lang="hi" class="hidden hindi">जागरूकता के साथ कार्रवाई</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">Taking informed steps to create real change.</span>
+                                    <span data-lang="hi" class="hidden hindi">वास्तविक परिवर्तन लाने के लिए सूचित कदम उठाना।</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg transition-transform duration-300 hover:scale-[1.03] hover:shadow-md">
+                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">H</span>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">
+                                    <span data-lang="en">Helping Hands of BMU Students</span>
+                                    <span data-lang="hi" class="hidden hindi">बीएमयू छात्रों के मददगार हाथ</span>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <span data-lang="en">We are the students who are here to help.</span>
+                                    <span data-lang="hi" class="hidden hindi">हम वे छात्र हैं जो मदद के लिए यहां हैं।</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Mission (The Problem) Section -->
+        <section id="mission" class="py-20 bg-gray-100 fade-in-section">
+            <div class="container mx-auto max-w-6xl px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <span data-lang="en">Our Mission: A Fair & Respectful Campus for All</span>
+                        <span data-lang="hi" class="hidden hindi">हमारा मिशन: सभी के लिए एक निष्पक्ष और सम्मानजनक कैंपस</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-2" data-lang="en">
+                        We've seen that many campus workers face serious challenges but fear speaking up. Sangrah exists to be their voice and their support system.
+                    </p>
+                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
+                        हमने देखा है कि कई कैंपस कार्यकर्ता गंभीर चुनौतियों का सामना करते हैं लेकिन बोलने से डरते हैं। संग्रह उनकी आवाज़ और उनका समर्थन प्रणाली बनने के लिए मौजूद है।
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1: Fair Pay -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 12h-.75m0 0v-.75A.75.75 0 0 1 9 10.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 18h-.75m0 0v-.75A.75.75 0 0 1 9 16.5h.75m0 0H21m-9-3.75h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM12 18h.008v.008H12v-.008Z" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                            <span data-lang="en">Advocacy for Fair Pay</span>
+                            <span data-lang="hi" class="hidden hindi">उचित वेतन की वकालत</span>
+                        </h3>
+                        <p class="text-gray-600 mb-2" data-lang="en">
+                            We work to ensure all workers receive their payments on time and are compensated fairly for their essential contributions.
+                        </p>
+                        <p class="text-gray-700 hindi hidden" data-lang="hi">
+                            हम यह सुनिश्चित करने के लिए काम करते हैं कि सभी कार्यकर्ताओं को उनका भुगतान समय पर मिले और उनके आवश्यक योगदान के लिए उचित मुआवजा मिले।
+                        </p>
+                    </div>
+                    <!-- Card 2: Respect -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.513c.474 0 .727.559.347.857l-4.418 3.225a.563.563 0 0 0-.162.632l2.105 5.11c.206.502-.38.954-.857.653l-4.418-3.22a.563.563 0 0 0-.68 0L6.34 20.25c-.477.301-1.063-.151-.857-.653l2.105-5.11a.563.563 0 0 0-.162-.632L3.01 9.778c-.38-.297-.127-.857.347-.857h5.513a.563.563 0 0 0 .475-.31L11.48 3.5Z" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                            <span data-lang="en">Fostering Respect</span>
+                            <span data-lang="hi" class="hidden hindi">सम्मान को बढ़ावा देना</span>
+                        </h3>
+                        <p class="text-gray-600 mb-2" data-lang="en">
+                            We address and mediate issues of disrespectful behavior, promoting a culture where students and workers treat each other as valued members of one community.
+                        </p>
+                         <p class="text-gray-700 hindi hidden" data-lang="hi">
+                            हम अपमानजनक व्यवहार के मुद्दों को संबोधित करते हैं और मध्यस्थता करते हैं, एक ऐसी संस्कृति को बढ़ावा देते हैं जहां छात्र और कार्यकर्ता एक-दूसरे को एक समुदाय के मूल्यवान सदस्यों के रूप में मानते हैं।
+                        </p>
+                    </div>
+                    <!-- Card 3: Safe Channel -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                            <span data-lang="en">A Safe Space to Speak</span>
+                            <span data-lang="hi" class="hidden hindi">बोलने के लिए एक सुरक्षित जगह</span>
+                        </h3>
+                        <p class="text-gray-600 mb-2" data-lang="en">
+                            We provide a confidential and anonymous platform for workers to report problems without fear of backlash. Your voice is safe with us.
+                        </p>
+                        <p class="text-gray-700 hindi hidden" data-lang="hi">
+                            हम कार्यकर्ताओं को बिना किसी डर के समस्याओं की रिपोर्ट करने के लिए एक गोपनीय और गुमनाम मंच प्रदान करते हैं। आपकी आवाज़ हमारे पास सुरक्षित है।
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report an Issue Section -->
+        <section id="report" class="py-20 bg-sangrah-gold-light fade-in-section">
+            <div class="container mx-auto max-w-4xl px-4">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Form Text -->
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                            <span data-lang="en">Report an Issue Confidentially</span>
+                            <span data-lang="hi" class="hidden hindi">गोपनीय रूप से समस्या की रिपोर्ट करें</span>
+                        </h2>
+                        <p class="text-lg text-gray-700 mb-4">
+                            <span data-lang="en">If you are a campus worker facing a problem, please let us know. We are here to listen and help.</span>
+                            <span data-lang="hi" class="hidden hindi">यदि आप एक कैंपस कार्यकर्ता हैं जो किसी समस्या का सामना कर रहे हैं, तो कृपया हमें बताएं। हम सुनने और मदद करने के लिए यहां हैं।</span>
+                        </p>
+                        <p class="text-lg text-gray-700 font-semibold mb-4">
+                            <span data-lang="en">Your safety is our top priority.</span>
+                            <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा हमारी सर्वोच्च प्राथमिकता है।</span>
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-3">
+                            <li>
+                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your name.</span>
+                                <span data-lang="hi" class="hidden hindi">आपको अपना नाम बताने की <span class="font-bold">जरूरत नहीं है</span>।</span>
+                            </li>
+                            <li>
+                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your contact details.</span>
+                                <span data-lang="hi" class="hidden hindi">आपको अपना संपर्क विवरण देने की <span class="font-bold">आवश्यकता नहीं है</span>।</span>
+                            </li>
+                            <li>
+                                <span data-lang="en">This form is <span class="font-bold">100% anonymous</span> if you want it to be.</span>
+                                <span data-lang="hi" class="hidden hindi">यदि आप चाहें तो यह फॉर्म <span class="font-bold">100% गुमनाम</span> है।</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Form -->
+                    <div class="bg-white p-8 rounded-xl shadow-2xl">
+                        <!-- Success Message -->
+                        <div id="form-success" class="hidden p-4 mb-4 bg-green-100 text-green-800 border border-green-300 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">
+                                <span data-lang="en">Thank you!</span>
+                                <span data-lang="hi" class="hidden hindi">धन्यवाद!</span>
+                            </h4>
+                            <p data-lang="en">Your report has been submitted anonymously. A member of Sangrah will review it. We are here for you.</p>
+                            <p data-lang="hi" class="hidden hindi">आपकी रिपोर्ट गुमनाम रूप से सबमिट कर दी गई है। संग्रह का एक सदस्य इसकी समीक्षा करेगा। हम आप के लिए यहां हैं।</p>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="form-error" class="hidden p-4 mb-4 bg-red-100 text-red-800 border border-red-300 rounded-lg">
+                            <p data-lang="en">Please provide a description of the issue.</p>
+                            <p data-lang="hi" class="hidden hindi">कृपया समस्या का विवरण प्रदान करें।</p>
+                        </div>
+
+                        <form id="report-form">
+                            <div class="mb-4">
+                                <label for="issue-type" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Type of Issue</span>
+                                    <span data-lang="hi" class="hidden hindi">समस्या का प्रकार</span>
+                                </label>
+                                <select id="issue-type" name="issue-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue">
+                                    <option value="" data-lang-en="Select an issue type" data-lang-hi="एक समस्या प्रकार चुनें">Select an issue type</option>
+                                    <option value="unpaid-wages" data-lang-en="Unpaid Wages / Payment Issues" data-lang-hi="अवैतनिक मजदूरी / भुगतान संबंधी समस्याएं">Unpaid Wages / Payment Issues</option>
+                                    <option value="disrespect" data-lang-en="Disrespectful Behavior (from students or staff)" data-lang-hi="अपमानजनक व्यवहार (छात्रों या कर्मचारियों से)">Disrespectful Behavior (from students or staff)</option>
+                                    <option value="safety" data-lang-en="Safety Concern" data-lang-hi="सुरक्षा चिंता">Safety Concern</option>
+                                    <option value="other" data-lang-en="Other Issue" data-lang-hi="अन्य समस्या">Other Issue</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Please describe the problem</span>
+                                    <span data-lang="hi" class="hidden hindi">कृपया समस्या का वर्णन करें</span>
+                                </label>
+                                <textarea id="description" name="description" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
+                                    data-placeholder-en="Please provide details. Who? When? Where?" 
+                                    data-placeholder-hi="कृपया विवरण प्रदान करें। कौन? कब? कहाँ?"
+                                    placeholder="Please provide details. Who? When? Where?"></textarea>
+                            </div>
+                            <div class="mb-6">
+                                <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Your Contact (Optional)</span>
+                                    <span data-lang="hi" class="hidden hindi">आपका संपर्क (वैकल्पिक)</span>
+                                </label>
+                                <input type="text" id="contact" name="contact" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
+                                    data-placeholder-en="Phone or Email (only if you want a reply)"
+                                    data-placeholder-hi="फोन या ईमेल (केवल यदि आप जवाब चाहते हैं)"
+                                    placeholder="Phone or Email (only if you want a reply)">
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span data-lang="en">This is 100% optional. Leave it blank to stay anonymous.</span>
+                                    <span data-lang="hi" class="hidden hindi">यह 100% वैकल्पिक है। गुमनाम रहने के लिए इसे खाली छोड़ दें।</span>
+                                </p>
+                            </div>
+                            <button type="submit" id="submit-btn" class="w-full bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 hover:shadow-xl hover:-translate-y-0.5">
+                                <span data-lang="en">Submit Anonymously</span>
+                                <span data-lang="hi" class="hidden hindi">गुमनाम रूप से सबमिट करें</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-20 bg-white fade-in-section">
+            <div class="container mx-auto max-w-6xl px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <span data-lang="en">Our Community in Action</span>
+                        <span data-lang="hi" class="hidden hindi">कार्रवाई में हमारा समुदाय</span>
+                    </h2>
+                    <p class="text-lg text-gray-600" data-lang="en">
+                        Building bridges, fostering respect, and standing in solidarity.
+                    </p>
+                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
+                        पुल बनाना, सम्मान को बढ़ावा देना, और एकजुटता में खड़े रहना।
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <img src="https://placehold.co/600x400/bfdbfe/1d4ed8?text=Solidarity" alt="Community Event 1" class="rounded-lg shadow-md aspect-video object-cover transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                    <img src="https://placehold.co/600x400/fef3c7/b45309?text=Respect" alt="Community Event 2" class="rounded-lg shadow-md aspect-video object-cover transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                    <img src="https://placehold.co/600x400/bfdbfe/1d4ed8?text=Support" alt="Community Event 3" class="rounded-lg shadow-md aspect-video object-cover transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                    <img src="https://placehold.co/600x400/fef3c7/b45309?text=Action" alt="Community Event 4" class="rounded-lg shadow-md aspect-video object-cover transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Involved Section -->
+        <section id="join" class="py-20 bg-sangrah-blue-light fade-in-section">
+            <div class="container mx-auto max-w-3xl px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    <span data-lang="en">Be a Helping Hand</span>
+                    <span data-lang="hi" class="hidden hindi">एक मददगार हाथ बनें</span>
+                </h2>
+                <p class="text-lg text-gray-700 mb-4" data-lang="en">
+                    Are you a BMU student who wants to make a difference? Join Sangrah and help us build a more supportive and respectful community. Your voice, your time, and your empathy can create real change.
+                </p>
+                <p class="text-lg text-gray-700 hindi mb-8 hidden" data-lang="hi">
+                    क्या आप एक बीएमयू छात्र हैं जो बदलाव लाना चाहते हैं? संग्रह से जुड़ें और हमें एक अधिक सहायक और सम्मानजनक समुदाय बनाने में मदद करें। आपकी आवाज़, आपका समय और आपकी सहानुभूति वास्तविक बदलाव ला सकती है।
+                </p>
+                <a href="mailto:sangrah.bmu@example.com" class="bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg hover:shadow-xl hover:-translate-y-0.5">
+                    <span data-lang="en">Join Sangrah Today</span>
+                    <span data-lang="hi" class="hidden hindi font-normal">आज ही संग्रह से जुड़ें</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Meet the Team Section -->
+        <section id="team" class="py-20 bg-white fade-in-section">
+            <div class="container mx-auto max-w-6xl px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <span data-lang="en">Meet the Student Volunteers</span>
+                        <span data-lang="hi" class="hidden hindi">छात्र स्वयंसेवकों से मिलें</span>
+                    </h2>
+                    <p class="text-lg text-gray-600" data-lang="en">
+                        We are students just like you, dedicated to making BMU a better place for everyone.
+                    </p>
+                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
+                        हम भी आपकी तरह छात्र हैं, जो बीएमयू को सभी के लिए एक बेहतर जगह बनाने के लिए समर्पित हैं।
+                    </p>
+                </div>
+                <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
+                    <!-- Team Member 1 -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <img src="https://placehold.co/400x400/bfdbfe/1d4ed8?text=S" alt="Team Member 1" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">
+                            <span data-lang="en">Student Name</span>
+                            <span data-lang="hi" class="hidden hindi">छात्र का नाम</span>
+                        </h3>
+                        <p class="text-sangrah-blue font-medium">
+                            <span data-lang="en">Role / Position</span>
+                            <span data-lang="hi" class="hidden hindi">भूमिका / पद</span>
+                        </p>
+                    </div>
+                    <!-- Team Member 2 -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <img src="https://placehold.co/400x400/fef3c7/b45309?text=A" alt="Team Member 2" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">
+                            <span data-lang="en">Student Name</span>
+                            <span data-lang="hi" class="hidden hindi">छात्र का नाम</span>
+                        </h3>
+                        <p class="text-sangrah-blue font-medium">
+                            <span data-lang="en">Role / Position</span>
+                            <span data-lang="hi" class="hidden hindi">भूमिका / पद</span>
+                        </p>
+                    </div>
+                    <!-- Team Member 3 -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <img src="https://placehold.co/400x400/bfdbfe/1d4ed8?text=N" alt="Team Member 3" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">
+                            <span data-lang="en">Student Name</span>
+                            <span data-lang="hi" class="hidden hindi">छात्र का नाम</span>
+                        </h3>
+                        <p class="text-sangrah-blue font-medium">
+                            <span data-lang="en">Role / Position</span>
+                            <span data-lang="hi" class="hidden hindi">भूमिका / पद</span>
+                        </p>
+                    </div>
+                    <!-- Team Member 4 -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <img src="https://placehold.co/400x400/fef3c7/b45309?text=G" alt="Team Member 4" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">
+                            <span data-lang="en">Student Name</span>
+                            <span data-lang="hi" class="hidden hindi">छात्र का नाम</span>
+                        </h3>
+                        <p class="text-sangrah-blue font-medium">
+                            <span data-lang="en">Role / Position</span>
+                            <span data-lang="hi" class="hidden hindi">भूमिका / पद</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto max-w-6xl px-4 text-center">
+            <a href="#" class="text-3xl font-extrabold text-white mb-4 inline-block">
+                <span data-lang="en">Sangrah</span>
+                <span data-lang="hi" class="hidden hindi text-2xl">संग्रह</span>
+            </a>
+            <p class="text-gray-400 mb-2 max-w-lg mx-auto" data-lang="en">
+                Standing for Support, Advocacy, Nurturing, Guiding, Respect, Action, and Helping Hands at BMU.
+            </p>
+            <p class="text-gray-400 hindi mb-6 max-w-lg mx-auto hidden" data-lang="hi">
+                बीएमयू में समर्थन, वकालत, पोषण, मार्गदर्शन, सम्मान, कार्रवाई और मददगार हाथों के लिए खड़ा है।
+            </p>
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="#about" class="hover:text-white">
+                    <span data-lang="en">About</span>
+                    <span data-lang="hi" class="hidden hindi">बारे में</span>
+                </a>
+                <a href="#mission" class="hover:text-white">
+                    <span data-lang="en">Mission</span>
+                    <span data-lang="hi" class="hidden hindi">मिशन</span>
+                </a>
+                <a href="#gallery" class="hover:text-white">
+                    <span data-lang="en">Gallery</span>
+                    <span data-lang="hi" class="hidden hindi">गैलरी</span>
+                </a>
+                <a href="#join" class="hover:text-white">
+                    <span data-lang="en">Join</span>
+                    <span data-lang="hi" class="hidden hindi">शामिल हों</span>
+                </a>
+                <a href="#report" class="hover:text-white">
+                    <span data-lang="en">Report</span>
+                    <span data-lang="hi" class="hidden hindi">रिपोर्ट</span>
+                </a>
+                <a href="#team" class="hover:text-white">
+                    <span data-lang="en">Team</span>
+                    <span data-lang="hi" class="hidden hindi">टीम</span>
+                </a>
+            </div>
+            <p class="text-sm text-gray-500">&copy; 2025 Sangrah BMU Community. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Language Toggle ---
+            let currentLanguage = 'en'; // Default language
+            const langToggleBtn = document.getElementById('lang-toggle');
+            const mobileLangToggleBtn = document.getElementById('mobile-lang-toggle');
+            const allLangElements = document.querySelectorAll('[data-lang]');
+            const allPlaceholderElements = document.querySelectorAll('[data-placeholder-en]');
+            const allSelectOptions = document.querySelectorAll('#issue-type option');
+
+            function setLanguage(lang) {
+                currentLanguage = lang;
+
+                // Toggle text elements
+                allLangElements.forEach(el => {
+                    if (el.getAttribute('data-lang') === lang) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
+
+                // Toggle placeholder attributes
+                allPlaceholderElements.forEach(el => {
+                    const placeholderText = el.getAttribute(`data-placeholder-${lang}`);
+                    if (placeholderText) {
+                        el.setAttribute('placeholder', placeholderText);
+                    }
+                });
+                
+                // Toggle <option> text in select
+                allSelectOptions.forEach(opt => {
+                    const enText = opt.getAttribute('data-lang-en');
+                    const hiText = opt.getAttribute('data-lang-hi');
+                    if (lang === 'hi' && hiText) {
+                        opt.textContent = hiText;
+                    } else if (lang === 'en' && enText) {
+                        opt.textContent = enText;
+                    }
+                });
+            }
+
+            function toggleLanguage() {
+                const newLang = currentLanguage === 'en' ? 'hi' : 'en';
+                setLanguage(newLang);
+            }
+
+            langToggleBtn.addEventListener('click', toggleLanguage);
+            mobileLangToggleBtn.addEventListener('click', () => {
+                toggleLanguage();
+                mobileMenu.classList.add('hidden'); // Also close menu
+            });
+
+            // Set initial language
+            setLanguage(currentLanguage);
+            // --- End Language Toggle ---
+
+
+            // Mobile Menu Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+De            });
+            
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Form Handling
+            const reportForm = document.getElementById('report-form');
+            const formSuccess = document.getElementById('form-success');
+            const formError = document.getElementById('form-error');
+            const submitBtn = document.getElementById('submit-btn');
+
+            reportForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Reset messages
+                formSuccess.classList.add('hidden');
+                formError.classList.add('hidden');
+
+                // Get form data
+                const description = document.getElementById('description').value;
+
+                // Simple validation
+                if (description.trim() === '') {
+                    formError.classList.remove('hidden');
+                    // Show validation message in correct language
+                    formError.querySelector('[data-lang="en"]').classList.toggle('hidden', currentLanguage !== 'en');
+                    formError.querySelector('[data-lang="hi"]').classList.toggle('hidden', currentLanguage !== 'hi');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                const loadingEn = 'Submitting...';
+                const loadingHi = 'सबमिट हो रहा है...';
+                submitBtn.innerHTML = currentLanguage === 'en' ? loadingEn : `<span class="hindi">${loadingHi}</span>`;
+
+                // Simulate a network request
+                // In a real application, this would send data to a secure server.
+                // For this static site, we just show a success message.
+                setTimeout(() => {
+                    // Show success
+                    reportForm.classList.add('hidden');
+                    formSuccess.classList.remove('hidden');
+                    // Show success message in correct language
+                    formSuccess.querySelector('[data-lang="en"]').classList.toggle('hidden', currentLanguage !== 'en');
+                    formSuccess.querySelector('[data-lang="hi"]').classList.toggle('hidden', currentLanguage !== 'hi');
+                    
+                }, 1500); // 1.5 second delay
+            });
+
+            // Scroll Animation Observer
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+        });
+    </script>
+</body>
+</html>
+
