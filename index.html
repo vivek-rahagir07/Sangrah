@@ -6,19 +6,31 @@
     <title>Sangrah - BMU Campus Community</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Noto Sans Devanagari for Hindi -->
+    <!-- Base Font (Inter) & Hindi (Noto Sans Devanagari) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Brand Fonts (Kanit for EN, Eczar for HI) -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Eczar:wght@700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+/* ... existing code ... -->
         }
-        /* Apply Noto Sans Devanagari to Hindi text */
-        .hindi {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            font-weight: 500; /* Adjust as needed */
+
+        /* --- Creative Brand Font Classes --- */
+        .font-brand-en {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 700; /* Use the bold weight we imported */
+            letter-spacing: 0.05em; /* Add slight spacing */
+        }
+        .font-brand-hi {
+            font-family: 'Eczar', serif;
+            font-weight: 700; /* Use the bold weight we imported */
+            /* Adjust size & position to better align with Kanit */
+            font-size: 0.9em; 
+            position: relative;
+            top: 0.05em; /* Adjusted vertical alignment */
         }
     </style>
     <!-- Custom Tailwind Configuration -->
@@ -49,11 +61,13 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
             <!-- Logo -->
-            <a href="#" class="flex items-center space-x-2 text-3xl font-extrabold text-sangrah-blue">
+            <!-- Increased text size, removed font-extrabold as font-brand-en handles weight -->
+            <a href="#" class="flex items-center space-x-3 text-4xl text-sangrah-blue">
                 <!-- Image Logo: Replace 'src' with your logo file -->
                 <img src="photoes/sangrah.png" alt="Sangrah Logo" class="w-11 h-11 rounded-full">
-                <span data-lang="en">Sangrah</span>
-                <span data-lang="hi" class="hidden hindi">संग्रह</span>
+                <!-- Applied brand font classes & uppercase -->
+                <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
+                <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
             </a>
             
             <!-- Desktop Nav -->
@@ -496,15 +510,17 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300 py-12">
         <div class="container mx-auto max-w-6xl px-4 text-center">
-            <a href="#" class="inline-flex items-center space-x-2 text-2xl font-bold text-white mb-4">
+            <!-- 
+                - Fixed broken HTML (removed stray SVG tags and duplicate spans)
+                - Corrected Hindi text from "संग्र" to "संग्रह"
+                - Increased logo size to w-8 h-8 for better consistency
+                - Applied brand font classes and increased text size
+            -->
+            <a href="#" class="inline-flex items-center space-x-2 text-3xl text-white mb-4">
                 <!-- Footer Image Logo: Replace 'src' with your logo file -->
-                <img src="photoes/sangrah.png" alt="Sangrah Logo" class="w-6 h-6 rounded-full">
-                <span data-lang="en">Sangrah</span>
-                <span data-lang="hi" class="hidden hindi">संग्र</span>
-                    <circle cx="50" cy="65" r="10" fill="#f59e0b"/> <!-- sangrah-gold -->
-                </svg>
-                <span data-lang="en">Sangrah</span>
-                <span data-lang="hi" class="hidden hindi">संग्रह</span>
+                <img src="photoes/sangrah.png" alt="Sangrah Logo" class="w-8 h-8 rounded-full">
+                <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
+                <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
             </a>
             <p class="text-gray-400 mb-2">
                 <span data-lang="en">A BMU student community for worker solidarity.</span>
@@ -610,7 +626,7 @@
 
             // Sync select placeholder language on change
             issueTypeSelect.addEventListener('change', () => {
-                if (issueTypeSelect.value === "") {
+                if (issueTypeSelect.Fvalue === "") {
                     const placeholderText = issueTypeSelect.options[0].getAttribute(currentLang === 'en' ? 'data-lang-en' : 'data-lang-hi');
                     issueTypeSelect.options[0].textContent = placeholderText;
                 } else {
