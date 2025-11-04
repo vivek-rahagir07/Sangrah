@@ -1,39 +1,67 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sangrah - BMU Campus Community</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Base Font (Inter) & Hindi (Noto Sans Devanagari) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Brand Fonts (Kanit for EN, Eczar for HI) -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Eczar:wght@700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Eczar:wght@700&display=swap"
+        rel="stylesheet">
+
     <style>
-/* ... existing code ... -->
+        body {
+            font-family: 'Inter', sans-serif;
         }
 
-        /* --- Creative Brand Font Classes --- */
+        .hindi {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-weight: 500;
+        }
+
         .font-brand-en {
             font-family: 'Kanit', sans-serif;
-            font-weight: 700; /* Use the bold weight we imported */
-            letter-spacing: 0.05em; /* Add slight spacing */
+            font-weight: 700;
+            letter-spacing: 0.05em;
         }
+
         .font-brand-hi {
             font-family: 'Eczar', serif;
-            font-weight: 700; /* Use the bold weight we imported */
-            /* Adjust size & position to better align with Kanit */
-            font-size: 0.9em; 
+            font-weight: 700;
+            font-size: 0.9em;
             position: relative;
-            top: 0.05em; /* Adjusted vertical alignment */
+            top: 0.05em;
+        }
+        
+        /* --- Animation Utility (from previous version) --- */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Hero Background Gradient (from previous version) --- */
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 35%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 35%);
+            z-index: 0;
         }
     </style>
-    <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -49,28 +77,30 @@
                             light: '#fef3c7',   // amber-100
                             dark: '#b45309',    // amber-700
                         }
-                    }
+                    },
+                    // Added font families from previous version for consistency
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        hindi: ['Noto Sans Devanagari', 'sans-serif'],
+                        'brand-en': ['Kanit', 'sans-serif'],
+                        'brand-hi': ['Eczar', 'serif'],
+                    },
                 }
             }
         }
     </script>
 </head>
+
 <body class="bg-gray-50 text-gray-800 antialiased">
 
-    <!-- Header & Navigation -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
-            <!-- Logo -->
-            <!-- Increased text size, removed font-extrabold as font-brand-en handles weight -->
             <a href="#" class="flex items-center space-x-3 text-4xl text-sangrah-blue">
-                <!-- Image Logo: Replace 'src' with your logo file -->
                 <img src="photoes/sangrah.jpeg" alt="Sangrah Logo" class="w-11 h-11 rounded-full">
-                <!-- Applied brand font classes & uppercase -->
                 <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
                 <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
             </a>
-            
-            <!-- Desktop Nav -->
+
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#about" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
                     <span data-lang="en">About Us</span>
@@ -84,26 +114,27 @@
                     <span data-lang="en">Get Involved</span>
                     <span data-lang="hi" class="hidden hindi">शामिल हों</span>
                 </a>
-                <a href="#report" class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-2 px-4 rounded-lg shadow transition duration-300">
+                <a href="#report"
+                    class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-2 px-4 rounded-lg shadow transition duration-300">
                     <span data-lang="en">Report an Issue</span>
                     <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
                 </a>
-                <!-- Language Toggle Button -->
-                <button id="lang-toggle" class="text-gray-600 hover:text-sangrah-blue transition duration-300 font-semibold py-1 px-2 border border-gray-300 rounded-md text-sm">
+                <button id="lang-toggle"
+                    class="text-gray-600 hover:text-sangrah-blue transition duration-300 font-semibold py-1 px-2 border border-gray-300 rounded-md text-sm">
                     <span data-lang="en">हिंदी में देखें</span>
                     <span data-lang="hi" class="hidden">View in English</span>
                 </button>
             </div>
 
-            <!-- Mobile Menu Button -->
             <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
                 </svg>
             </button>
         </nav>
 
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t">
             <a href="#about" class="block py-3 px-4 text-gray-600 hover:bg-gray-100 mobile-nav-link">
                 <span data-lang="en">About Us</span>
@@ -117,38 +148,42 @@
                 <span data-lang="en">Get Involved</span>
                 <span data-lang="hi" class="hidden hindi">शामिल हों</span>
             </a>
-            <a href="#report" class="block py-3 px-6 text-center bg-sangrah-gold text-white font-bold m-4 rounded-lg mobile-nav-link">
+            <a href="#report"
+                class="block py-3 px-6 text-center bg-sangrah-gold text-white font-bold m-4 rounded-lg mobile-nav-link">
                 <span data-lang="en">Report an Issue</span>
                 <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
             </a>
-            <!-- Mobile Language Toggle -->
-            <button id="mobile-lang-toggle" class="block w-full text-left py-3 px-4 text-gray-600 hover:bg-gray-100 font-semibold">
+            <button id="mobile-lang-toggle"
+                class="block w-full text-left py-3 px-4 text-gray-600 hover:bg-gray-100 font-semibold">
                 <span data-lang="en">हिंदी में देखें</span>
                 <span data-lang="hi" class="hidden">View in English</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
-
-        <!-- Hero Section -->
-        <section class="bg-sangrah-blue text-white py-20 md:py-32">
-            <div class="container mx-auto max-w-6xl px-4 text-center">
+        <!-- Hero Section (restored classes) -->
+        <section class="bg-sangrah-blue text-white py-20 md:py-32 relative overflow-hidden hero-bg">
+            <div class="container mx-auto max-w-6xl px-4 text-center relative z-10">
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
                     <span data-lang="en">Support & Solidarity on Campus</span>
                     <span data-lang="hi" class="hidden hindi font-bold">कैंपस में समर्थन और एकजुटता</span>
                 </h1>
                 <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-10">
-                    <span data-lang="en">We are Sangrah, a BMU student community dedicated to ensuring the rights, respect, and well-being of every worker on our campus.</span>
-                    <span data-lang="hi" class="hidden hindi">हम संग्रह हैं, एक बीएमयू छात्र समुदाय जो हमारे कैंपस के हर कार्यकर्ता के अधिकारों, सम्मान और कल्याण को सुनिश्चित करने के लिए समर्पित है।</span>
+                    <span data-lang="en">We are Sangrah, a BMU student community dedicated to ensuring the rights,
+                        respect, and well-being of every worker on our campus.</span>
+                    <span data-lang="hi" class="hidden hindi">हम संग्रह हैं, एक बीएमयू छात्र समुदाय जो हमारे कैंपस के हर
+                        कार्यकर्ता के अधिकारों, सम्मान और कल्याण को सुनिश्चित करने के लिए समर्पित है।</span>
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#report" class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
+                    <a href="#report"
+                        class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
                         <span data-lang="en">Report an Issue Safely</span>
-                        <span data-lang="hi" class="hidden hindi font-normal">सुरक्षित रूप से समस्या की रिपोर्ट करें</span>
+                        <span data-lang="hi" class="hidden hindi font-normal">सुरक्षित रूप से समस्या की रिपोर्ट
+                            करें</span>
                     </a>
-                    <a href="#about" class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg">
+                    <a href="#about"
+                        class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg">
                         <span data-lang="en">Learn More About Us</span>
                         <span data-lang="hi" class="hidden hindi font-normal">हमारे बारे में और जानें</span>
                     </a>
@@ -156,11 +191,125 @@
             </div>
         </section>
 
-        <!-- About Us (Acronym) Section -->
-        <section id="about" class="py-20 bg-white">
+        <!-- START: RE-ADDED MISSING SECTIONS -->
+
+        <!-- Full Form Creative Section -->
+        <section id="full-form" class="py-20 bg-white">
             <div class="container mx-auto max-w-6xl px-4">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div>
+                <div class="text-center max-w-3xl mx-auto mb-16 fade-in-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <span data-lang="en">What <span class="font-brand-en text-sangrah-blue">SANGRAH</span> Stands For</span>
+                        <span data-lang="hi" class="hidden hindi">क्या है <span class="font-brand-hi text-sangrah-blue">संग्रह</span> का मतलब</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-2" data-lang="en">
+                        Our name is our mission. Each letter represents a core value we are committed to.
+                    </p>
+                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
+                        हमारा नाम ही हमारा मिशन है। प्रत्येक अक्षर हमारे एक मूल मूल्य का प्रतिनिधित्व करता है जिसके लिए हम प्रतिबद्ध हैं।
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-on-scroll">
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">S</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Support & Solidarity</span>
+                                <span data-lang="hi" class="hidden hindi">समर्थन और एकजुटता</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Standing together with our campus workers.</span>
+                                <span data-lang="hi" class="hidden hindi">हमारे कैंपस कार्यकर्ताओं के साथ खड़े रहना।</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">A</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Advocacy</span>
+                                <span data-lang="hi" class="hidden hindi">वकालत</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Championing fair pay, respect, and safe conditions.</span>
+                                <span data-lang="hi" class="hidden hindi">उचित वेतन, सम्मान और सुरक्षित स्थितियों की वकालत करना।</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">N</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Nurturing</span>
+                                <span data-lang="hi" class="hidden hindi">पोषण</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Fostering a sense of belonging for everyone.</span>
+                                <span data-lang="hi" class="hidden hindi">सभी के लिए अपनेपन की भावना को बढ़ावा देना।</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">G</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Guiding Growth</span>
+                                <span data-lang="hi" class="hidden hindi">विकास में मार्गदर्शन</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Helping our community grow with empathy.</span>
+                                <span data-lang="hi" class="hidden hindi">हमारे समुदाय को सहानुभूति के साथ बढ़ने में मदद करना।</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">R</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Respect</span>
+                                <span data-lang="hi" class="hidden hindi">सम्मान</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Bridging the gap between students and workers.</span>
+                                <span data-lang="hi" class="hidden hindi">छात्रों और कार्यकर्ताओं के बीच की खाई को पाटना।</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">A</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Action</span>
+                                <span data-lang="hi" class="hidden hindi">कार्रवाई</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">Taking informed steps to create real change.</span>
+                                <span data-lang="hi" class="hidden hindi">वास्तविक परिवर्तन लाने के लिए सूचित कदम उठाना।</span>
+                            </S>
+                        </div>
+                    </div>
+                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">H</span>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+                                <span data-lang="en">Helping Hands</span>
+                                <span data-lang="hi" class="hidden hindi">मददगार हाथ</span>
+                            </h3>
+                            <p class="text-gray-600">
+                                <span data-lang="en">We are the students who are here to help.</span>
+                                <span data-lang="hi" class="hidden hindi">हम वे छात्र हैं जो मदद के लिए यहां हैं।</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20 bg-gray-100">
+            <div class="container mx-auto max-w-6xl px-4">
+                <div class="grid grid-cols-1 gap-12 items-center">
+                    <div class="text-center max-w-3xl mx-auto fade-in-on-scroll">
                         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                             <span data-lang="en">Who We Are</span>
                             <span data-lang="hi" class="hidden hindi">हम कौन हैं</span>
@@ -178,108 +327,14 @@
                             हमारा मिशन सहानुभूति और कार्रवाई की नींव पर बना है। हमारा मानना है कि बीएमयू समुदाय के प्रत्येक सदस्य को सम्मान के साथ व्यवहार करने, उचित भुगतान पाने और अपनी बात रखने के लिए एक सुरक्षित स्थान पाने का अधिकार है।
                         </p>
                     </div>
-                    <!-- Acronym List -->
-                    <div class="space-y-4">
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">S</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Support & Solidarity</span>
-                                    <span data-lang="hi" class="hidden hindi">समर्थन और एकजुटता</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Standing together with our campus workers.</span>
-                                    <span data-lang="hi" class="hidden hindi">हमारे कैंपस कार्यकर्ताओं के साथ खड़े रहना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">A</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Advocacy for Worker Rights</span>
-                                    <span data-lang="hi" class="hidden hindi">कार्यकर्ता अधिकारों की वकालत</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Championing fair pay, respect, and safe conditions.</span>
-                                    <span data-lang="hi" class="hidden hindi">उचित वेतन, सम्मान और सुरक्षित स्थितियों की वकालत करना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">N</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Nurturing the Campus Community</span>
-                                    <span data-lang="hi" class="hidden hindi">कैंपस समुदाय का पोषण</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Fostering a sense of belonging for everyone.</span>
-                                    <span data-lang="hi" class="hidden hindi">सभी के लिए अपनेपन की भावना को बढ़ावा देना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">G</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Guiding Growth and Development</span>
-                                    <span data-lang="hi" class="hidden hindi">विकास में मार्गदर्शन</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Helping our community grow with empathy.</span>
-                                    <span data-lang="hi" class="hidden hindi">हमारे समुदाय को सहानुभूति के साथ बढ़ने में मदद करना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">R</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Respect and Relationship Building</span>
-                                    <span data-lang="hi" class="hidden hindi">सम्मान और संबंध बनाना</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Bridging the gap between students and workers.</span>
-                                    <span data-lang="hi" class="hidden hindi">छात्रों और कार्यकर्ताओं के बीच की खाई को पाटना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">A</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Action with Awareness</span>
-                                    <span data-lang="hi" class="hidden hindi">जागरूकता के साथ कार्रवाई</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">Taking informed steps to create real change.</span>
-                                    <span data-lang="hi" class="hidden hindi">वास्तविक परिवर्तन लाने के लिए सूचित कदम उठाना।</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                            <span class="flex-shrink-0 w-10 h-10 bg-sangrah-blue-light text-sangrah-blue-dark font-bold text-xl rounded-full flex items-center justify-center">H</span>
-                            <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">
-                                    <span data-lang="en">Helping Hands of BMU Students</span>
-                                    <span data-lang="hi" class="hidden hindi">बीएमयू छात्रों के मददगार हाथ</span>
-                                </h3>
-                                <p class="text-gray-600">
-                                    <span data-lang="en">We are the students who are here to help.</span>
-                                    <span data-lang="hi" class="hidden hindi">हम वे छात्र हैं जो मदद के लिए यहां हैं।</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Our Mission (The Problem) Section -->
-        <section id="mission" class="py-20 bg-gray-100">
+        <!-- Our Mission Section -->
+        <section id="mission" class="py-20 bg-white">
             <div class="container mx-auto max-w-6xl px-4">
-                <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                         <span data-lang="en">Our Mission: A Fair & Respectful Campus for All</span>
                         <span data-lang="hi" class="hidden hindi">हमारा मिशन: सभी के लिए एक निष्पक्ष और सम्मानजनक कैंपस</span>
@@ -291,9 +346,8 @@
                         हमने देखा है कि कई कैंपस कार्यकर्ता गंभीर चुनौतियों का सामना करते हैं लेकिन बोलने से डरते हैं। संग्रह उनकी आवाज़ और उनका समर्थन प्रणाली बनने के लिए मौजूद है।
                     </p>
                 </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Card 1: Fair Pay -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <div class="grid md:grid-cols-3 gap-8 fade-in-on-scroll">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                         <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 12h-.75m0 0v-.75A.75.75 0 0 1 9 10.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 18h-.75m0 0v-.75A.75.75 0 0 1 9 16.5h.75m0 0H21m-9-3.75h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM12 18h.008v.008H12v-.008Z" />
                         </svg>
@@ -308,8 +362,7 @@
                             हम यह सुनिश्चित करने के लिए काम करते हैं कि सभी कार्यकर्ताओं को उनका भुगतान समय पर मिले और उनके आवश्यक योगदान के लिए उचित मुआवजा मिले।
                         </p>
                     </div>
-                    <!-- Card 2: Respect -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                         <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.513c.474 0 .727.559.347.857l-4.418 3.225a.563.563 0 0 0-.162.632l2.105 5.11c.206.502-.38.954-.857.653l-4.418-3.22a.563.563 0 0 0-.68 0L6.34 20.25c-.477.301-1.063-.151-.857-.653l2.105-5.11a.563.563 0 0 0-.162-.632L3.01 9.778c-.38-.297-.127-.857.347-.857h5.513a.563.563 0 0 0 .475-.31L11.48 3.5Z" />
                         </svg>
@@ -324,8 +377,7 @@
                             हम अपमानजनक व्यवहार के मुद्दों को संबोधित करते हैं और मध्यस्थता करते हैं, एक ऐसी संस्कृति को बढ़ावा देते हैं जहां छात्र और कार्यकर्ता एक-दूसरे को एक समुदाय के मूल्यवान सदस्यों के रूप में मानते हैं।
                         </p>
                     </div>
-                    <!-- Card 3: Safe Channel -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                         <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
                         </svg>
@@ -347,7 +399,7 @@
         <!-- Report an Issue Section -->
         <section id="report" class="py-20 bg-sangrah-gold-light">
             <div class="container mx-auto max-w-4xl px-4">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="grid md:grid-cols-2 gap-12 items-center fade-in-on-scroll">
                     <!-- Form Text -->
                     <div>
                         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
@@ -486,62 +538,158 @@
             </div>
         </section>
 
-        <!-- Get Involved Section -->
+        <!-- END: RE-ADDED MISSING SECTIONS -->
+
+
+        <!-- NEW: FAQ Section -->
+        <section id="faq" class="py-20 bg-gray-100">
+            <div class="container mx-auto max-w-3xl px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        <span data-lang="en">Frequently Asked Questions</span>
+                        <span data-lang="hi" class="hidden hindi">अक्सर पूछे जाने वाले प्रश्न</span>
+                    </h2>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- FAQ Item 1 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Is my report really 100% anonymous?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या मेरी रिपोर्ट सचमुच 100% गुमनाम है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Yes. The form does not track your identity. If you do not provide your name or contact details, we have no way of knowing who you are. We designed it this way so you can report issues safely.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हाँ। फॉर्म आपकी पहचान को ट्रैक नहीं करता है। यदि आप अपना नाम या संपर्क विवरण प्रदान नहीं करते हैं, तो हमारे पास यह जानने का कोई तरीका नहीं है कि आप कौन हैं। हमने इसे इस तरह से डिज़ाइन किया है ताकि आप सुरक्षित रूप से समस्याओं की रिपोर्ट कर सकें।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 2 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Who can join Sangrah?</span>
+                                    <span data-lang="hi" class="hidden hindi">संग्रह में कौन शामिल हो सकता है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Sangrah is a student-led initiative. We welcome all current BMU students (from any program) who are passionate about worker rights and building a more empathetic campus community.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                संग्रह एक छात्र-नेतृत्व वाली पहल है। हम सभी वर्तमान बीएमयू छात्रों (किसी भी कार्यक्रम से) का स्वागत करते हैं जो कार्यकर्ता अधिकारों और अधिक सहानुभूतिपूर्ण परिसर समुदाय के निर्माण के बारे में भावुक हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 3 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">What happens after I submit a report?</span>
+                                    <span data-lang="hi" class="hidden hindi">रिपोर्ट सबमिट करने के बाद क्या होता है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                A dedicated member of the Sangrah team reviews every report. We document the issue and, if it's a pattern, we escalate it (anonymously) to the university administration or the relevant contractors. If you provide contact details and ask for help, we will reach out to you directly to see how we can support you.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                संग्रह टीम का एक समर्पित सदस्य हर रिपोर्ट की समीक्षा करता है। हम मुद्दे का दस्तावेजीकरण करते हैं और, यदि यह एक पैटर्न है, तो हम इसे (गुमनाम रूप से) विश्वविद्यालय प्रशासन या संबंधित ठेकेदारों तक पहुंचाते हैं। यदि आप संपर्क विवरण प्रदान करते हैं और मदद मांगते हैं, तो हम आपसे सीधे संपर्क करेंगे कि हम आपकी कैसे सहायता कर सकते हैं।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="join" class="py-20 bg-white">
             <div class="container mx-auto max-w-3xl px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                    <span data-lang="en">Be a Helping Hand</span>
-                    <span data-lang="hi" class="hidden hindi">एक मददगार हाथ बनें</span>
-                </h2>
-                <p class="text-lg text-gray-600 mb-4" data-lang="en">
-                    Are you a BMU student who wants to make a difference? Join Sangrah and help us build a more supportive and respectful community. Your voice, your time, and your empathy can create real change.
-                </p>
-                <p class="text-lg text-gray-700 mb-8 hindi hidden" data-lang="hi">
-                    क्या आप एक बीएमयू छात्र हैं जो बदलाव लाना चाहते हैं? संग्रह से जुड़ें और एक अधिक सहायक और सम्मानजनक समुदाय बनाने में हमारी मदद करें। आपकी आवाज़, आपका समय और आपकी सहानुभूति वास्तविक परिवर्तन ला सकती है।
-                </p>
-                <a href="mailto:sangrah.bmu@example.com" class="bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
-                    <span data-lang="en">Contact Us to Join</span>
-                    <span data-lang="hi" class="hidden hindi">शामिल होने के लिए संपर्क करें</span>
-                </a>
+                 <!-- Added animation class -->
+                <div class="bg-gradient-to-br from-sangrah-blue-dark to-sangrah-blue p-10 md:p-16 rounded-xl shadow-2xl text-white transform hover:scale-105 transition-transform duration-300 fade-in-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        <span data-lang="en">Be a Helping Hand</span>
+                        <span data-lang="hi" class="hidden hindi">एक मददगार हाथ बनें</span>
+                    </h2>
+                    <p class="text-lg text-blue-100 mb-4" data-lang="en">
+                        Are you a BMU student who wants to make a difference? Join Sangrah and help us build a more
+                        supportive and respectful community. Your voice, your time, and your empathy can create real change.
+                    </p>
+                    <p class="text-lg text-blue-100 mb-8 hindi hidden" data-lang="hi">
+                        क्या आप एक बीएमयू छात्र हैं जो बदलाव लाना चाहते हैं? संग्रह से जुड़ें और एक अधिक सहायक और सम्मानजनक
+                        समुदाय बनाने में हमारी मदद करें। आपकी आवाज़, आपका समय और आपकी सहानुभूति वास्तविक परिवर्तन ला सकती
+                        है।
+                    </p>
+                    <a href="mailto:sangrah.bmu@example.com"
+                        class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
+                        <span data-lang="en">Contact Us to Join</span>
+                        <span data-lang="hi" class="hidden hindi">शामिल होने के लिए संपर्क करें</span>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300 py-12">
         <div class="container mx-auto max-w-6xl px-4 text-center">
-            <!-- 
-                - Fixed broken HTML (removed stray SVG tags and duplicate spans)
-                - Corrected Hindi text from "संग्र" to "संग्रह"
-                - Increased logo size to w-8 h-8 for better consistency
-                - Applied brand font classes and increased text size
-            -->
             <a href="#" class="inline-flex items-center space-x-2 text-3xl text-white mb-4">
-                <!-- Footer Image Logo: Replace 'src' with your logo file -->
                 <img src="photoes/sangrah.jpeg" alt="Sangrah Logo" class="w-8 h-8 rounded-full">
                 <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
                 <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
             </a>
             <p class="text-gray-400 mb-2">
-                <span data-lang="en">A BMU student lead initiative for worker solidarity.</span>
+                <span data-lang="en">A BMU student community for worker solidarity.</span>
                 <span data-lang="hi" class="hidden hindi">कार्यकर्ता एकजुटता के लिए एक बीएमयू छात्र समुदाय।</span>
-            </p>
+            </D>
             <p class="text-sm">
-                &copy; <span id="current-year"></span> 
+                &copy; <span id="current-year"></span>
                 <span data-lang="en">Sangrah. All rights reserved.</span>
                 <span data-lang="hi" class="hidden hindi">संग्रह। सर्वाधिकार सुरक्षित।</span>
             </p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Set Current Year in Footer ---
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // --- Mobile Menu Toggle ---
+            // --- Scroll Animations ---
+            const scrollElements = document.querySelectorAll('.fade-in-on-scroll');
+            if (window.IntersectionObserver) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                scrollElements.forEach(el => observer.observe(el));
+            } else {
+                scrollElements.forEach(el => el.classList.add('is-visible')); // Fallback
+            }
+
+            // --- Mobile Menu ---
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
@@ -550,38 +698,65 @@
                 mobileMenu.classList.toggle('hidden');
             });
 
-            // Close mobile menu when a link is clicked
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
             });
 
-            // --- Language Toggle ---
+            // --- FAQ Accordion ---
+            const faqToggles = document.querySelectorAll('.faq-toggle');
+            const faqAnswers = document.querySelectorAll('.faq-answer');
+            const faqIcons = document.querySelectorAll('.faq-icon');
+
+            faqToggles.forEach((clickedToggle, index) => {
+                clickedToggle.addEventListener('click', () => {
+                    const targetAnswer = clickedToggle.parentElement.nextElementSibling;
+                    const targetIcon = clickedToggle.querySelector('.faq-icon');
+                    
+                    // Check if the clicked one is already open
+                    const isAlreadyOpen = !targetAnswer.classList.contains('hidden');
+
+                    // First, close all answers
+                    faqAnswers.forEach((answer, i) => {
+                        answer.classList.add('hidden');
+                        faqToggles[i].setAttribute('aria-expanded', 'false');
+                        if (faqIcons[i]) {
+                             faqIcons[i].classList.remove('rotate-180');
+                        }
+                    });
+
+                    // If it wasn't already open, open it.
+                    if (!isAlreadyOpen && targetAnswer && targetIcon) {
+                        targetAnswer.classList.remove('hidden');
+                        targetIcon.classList.add('rotate-180');
+                        clickedToggle.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+
+            // --- Language Toggle Elements ---
             const langToggleBtns = [document.getElementById('lang-toggle'), document.getElementById('mobile-lang-toggle')];
             const enElements = document.querySelectorAll('[data-lang="en"]');
             const hiElements = document.querySelectorAll('[data-lang="hi"]');
             
-            // Form placeholders
+            // --- Form Elements (Now guaranteed to exist) ---
             const descriptionInput = document.getElementById('description');
             const contactInput = document.getElementById('contact');
             const issueTypeSelect = document.getElementById('issue-type');
-            
-            // --- Form Elements ---
+
             const reportForm = document.getElementById('report-form');
             const successMsg = document.getElementById('form-success');
             const errorMsg = document.getElementById('form-error');
             const submitBtn = document.getElementById('submit-btn');
-            
-            // Audio Recording Elements
+
             const recordBtn = document.getElementById('record-btn');
             const stopBtn = document.getElementById('stop-btn');
             const recordStatus = document.getElementById('record-status');
             const audioPlayback = document.getElementById('audio-playback');
 
-            let currentLang = 'en'; // Default language
-            
-            // Audio Recording State
+            let currentLang = 'en';
+
             let mediaStream;
             let mediaRecorder;
             let audioChunks = [];
@@ -591,50 +766,51 @@
 
             const toggleLanguage = () => {
                 const isEnglish = currentLang === 'en';
-                
+
                 enElements.forEach(el => el.classList.toggle('hidden', isEnglish));
                 hiElements.forEach(el => el.classList.toggle('hidden', !isEnglish));
 
-                // Update lang state
                 currentLang = isEnglish ? 'hi' : 'en';
 
-                // Update form placeholders
-                if (currentLang === 'hi') {
-                    descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-hi');
-                    contactInput.placeholder = contactInput.getAttribute('data-placeholder-hi');
-                    // Update select option
-                    if (issueTypeSelect.value === "") {
-                        issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
-                    }
-                } else {
-                    descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-en');
-                    contactInput.placeholder = contactInput.getAttribute('data-placeholder-en');
-                     // Update select option
-                    if (issueTypeSelect.value === "") {
-                        issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
+                // Check if form elements exist before updating placeholders
+                if (descriptionInput && contactInput && issueTypeSelect) {
+                    if (currentLang === 'hi') {
+                        descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-hi');
+                        contactInput.placeholder = contactInput.getAttribute('data-placeholder-hi');
+                        if (issueTypeSelect.value === "") {
+                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
+                        }
+                    } else {
+                        descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-en');
+                        contactInput.placeholder = contactInput.getAttribute('data-placeholder-en');
+                        if (issueTypeSelect.value === "") {
+                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
+                        }
                     }
                 }
-                
-                // Manually update recording status text if it's visible
-                const currentStatus = recordStatus.getAttribute('data-status-key');
-                if (currentStatus) {
-                    updateRecordStatus(currentStatus);
+
+                // Check if record status exists
+                if (recordStatus) {
+                    const currentStatus = recordStatus.getAttribute('data-status-key');
+                    if (currentStatus) {
+                        updateRecordStatus(currentStatus);
+                    }
                 }
             };
-            
+
             langToggleBtns.forEach(btn => btn.addEventListener('click', toggleLanguage));
 
-            // Sync select placeholder language on change
-            issueTypeSelect.addEventListener('change', () => {
-                if (issueTypeSelect.Fvalue === "") {
-                    const placeholderText = issueTypeSelect.options[0].getAttribute(currentLang === 'en' ? 'data-lang-en' : 'data-lang-hi');
-                    issueTypeSelect.options[0].textContent = placeholderText;
-                } else {
-                    // Reset other options to the correct language if needed (already handled by data-lang attributes)
-                }
-            });
-
-            // --- Audio Recording Logic ---
+            // Add check for issueTypeSelect
+            if (issueTypeSelect) {
+                issueTypeSelect.addEventListener('change', () => {
+                    // FIX: Changed .Fvalue to .value
+                    if (issueTypeSelect.value === "") {
+                        const placeholderText = issueTypeSelect.options[0].getAttribute(currentLang === 'en' ? 'data-lang-en' : 'data-lang-hi');
+                        issueTypeSelect.options[0].textContent = placeholderText;
+                    } else {
+                    }
+                });
+            }
 
             function updateRecordStatus(key) {
                 const statusMap = {
@@ -653,160 +829,133 @@
                         'limit': '2 मिनट के बाद स्वचालित रूप से बंद हो गया।'
                     }
                 };
-                
-                recordStatus.textContent = statusMap[currentLang][key] || '';
-                recordStatus.setAttribute('data-status-key', key);
+
+                // Add check for recordStatus
+                if (recordStatus) {
+                    recordStatus.textContent = statusMap[currentLang][key] || '';
+                    recordStatus.setAttribute('data-status-key', key);
+                }
             }
 
-            recordBtn.addEventListener('click', async () => {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    updateRecordStatus('error');
-                    return;
-                }
+            // Add check for recordBtn
+            if (recordBtn) {
+                recordBtn.addEventListener('click', async () => {
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                        updateRecordStatus('error');
+                        return;
+                    }
 
-                try {
-                    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    
-                    recordBtn.classList.add('hidden');
-                    stopBtn.classList.remove('hidden');
-                    audioPlayback.classList.add('hidden');
-                    audioBlob = null;
-                    audioChunks = [];
-                    updateRecordStatus('recording');
+                    try {
+                        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                    mediaRecorder = new MediaRecorder(mediaStream);
-
-                    mediaRecorder.ondataavailable = (event) => {
-                        audioChunks.push(event.data);
-                    };
-
-                    mediaRecorder.onstop = () => {
-                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        audioPlayback.src = audioUrl;
-                        audioPlayback.classList.remove('hidden');
-                        
-                        recordBtn.classList.remove('hidden');
-                        stopBtn.classList.add('hidden');
-                        
-                        if (recordTimer) { // If stopped manually
-                            clearTimeout(recordTimer);
-                            updateRecordStatus('complete');
-                        } else { // If stopped by timer
-                            updateRecordStatus('limit');
-                        }
-                        
-                        // Stop the media stream tracks to turn off the mic indicator
-                        mediaStream.getTracks().forEach(track => track.stop());
-                    };
-
-                    mediaRecorder.start();
-
-                    // Automatically stop after 2 minutes (120000 ms)
-                    recordTimer = setTimeout(() => {
-                        if (mediaRecorder.state === 'recording') {
-                            mediaRecorder.stop();
-                        }
-                        recordTimer = null; // Clear timer
-                    }, 120000);
-
-                } catch (err) {
-                    console.error("Error accessing microphone:", err);
-                    updateRecordStatus('denied');
-                }
-            });
-
-            stopBtn.addEventListener('click', () => {
-                if (mediaRecorder && mediaRecorder.state === 'recording') {
-                    mediaRecorder.stop();
-                }
-            });
-
-
-            // --- Report Form Submission ---
-            reportForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                // Hide messages
-                successMsg.classList.add('hidden');
-                errorMsg.classList.add('hidden');
-
-                const description = descriptionInput.value.trim();
-
-                if (!description && !audioBlob) {
-                    // Show error if description AND audio are empty
-                    errorMsg.classList.remove('hidden');
-                } else {
-                    // ---
-                    // In a real application, you would send this data to a server,
-                    // e.g., using fetch() to post to an API or a service like Formspree.
-                    // This now uses FormData to accommodate the audio file.
-                    //
-                    // const formData = new FormData();
-                    // formData.append('issue_type', document.getElementById('issue-type').value);
-                    // formData.append('description', description);
-                    // formData.append('contact', document.getElementById('contact').value.trim());
-                    //
-                    // if (audioBlob) {
-                    //     formData.append('audio_recording', audioBlob, 'recording.webm');
-                    // }
-                    //
-                    // fetch('/api/report', {
-                    //     method: 'POST',
-                    //     body: formData 
-                    // })
-                    // .then(response => response.json())
-                    // .then(data => {
-                    //     // Show success, reset form
-                    //     successMsg.classList.remove('hidden');
-                    //     reportForm.reset();
-                    // })
-                    // .catch(error => {
-                    //     // Show a more specific error message
-                    //     errorMsg.textContent = 'Submission failed. Please try again.';
-                    //     errorMsg.classList.remove('hidden');
-                    // });
-                    // ---
-                    
-                    // For this demo, we'll just simulate success.
-                    submitBtn.disabled = true;
-                    
-                    // Simulate a short delay
-                    setTimeout(() => {
-                        successMsg.classList.remove('hidden');
-                        reportForm.reset();
-                        submitBtn.disabled = false;
-                        
-                        // Reset audio state
+                        recordBtn.classList.add('hidden');
+                        stopBtn.classList.remove('hidden');
+                        audioPlayback.classList.add('hidden');
                         audioBlob = null;
                         audioChunks = [];
-                        audioPlayback.classList.add('hidden');
-                        audioPlayback.src = '';
-                        recordStatus.textContent = '';
-                        recordStatus.removeAttribute('data-status-key');
-                        recordBtn.classList.remove('hidden');
-                        stopBtn.classList.add('hidden');
-                        if(recordTimer) clearTimeout(recordTimer);
+                        updateRecordStatus('recording');
 
-                        // Reset select placeholder to current language
-                        if (currentLang === 'en') {
-                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
-                        } else {
-                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
-                        }
+                        mediaRecorder = new MediaRecorder(mediaStream);
 
-                        // Hide success message after a few seconds
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            audioPlayback.src = audioUrl;
+                            audioPlayback.classList.remove('hidden');
+
+                            recordBtn.classList.remove('hidden');
+                            stopBtn.classList.add('hidden');
+
+                            if (recordTimer) {
+                                clearTimeout(recordTimer);
+                                updateRecordStatus('complete');
+                            } else {
+                                updateRecordStatus('limit');
+                            }
+
+                            mediaStream.getTracks().forEach(track => track.stop());
+                        };
+
+                        mediaRecorder.start();
+
+                        recordTimer = setTimeout(() => {
+                            if (mediaRecorder.state === 'recording') {
+                                mediaRecorder.stop();
+                            }
+                            recordTimer = null;
+                        }, 120000);
+
+                    } catch (err) {
+                        console.error("Error accessing microphone:", err);
+                        updateRecordStatus('denied');
+                    }
+                });
+            }
+
+            // Add check for stopBtn
+            if (stopBtn) {
+                stopBtn.addEventListener('click', () => {
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop();
+                    }
+                });
+            }
+
+            // Add check for reportForm
+            if (reportForm) {
+                reportForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    successMsg.classList.add('hidden');
+                    errorMsg.classList.add('hidden');
+
+                    const description = descriptionInput.value.trim();
+
+                    if (!description && !audioBlob) {
+                        errorMsg.classList.remove('hidden');
+                    } else {
+                        submitBtn.disabled = true;
+
                         setTimeout(() => {
-                            successMsg.classList.add('hidden');
-                        }, 6000);
+                            successMsg.classList.remove('hidden');
+                            reportForm.reset();
+                            submitBtn.disabled = false;
 
-                    }, 500);
-                }
-            });
+                            audioBlob = null;
+                            audioChunks = [];
+                            audioPlayback.classList.add('hidden');
+                            audioPlayback.src = '';
+                            recordStatus.textContent = '';
+                            recordStatus.removeAttribute('data-status-key');
+                            recordBtn.classList.remove('hidden');
+                            stopBtn.classList.add('hidden');
+                            if (recordTimer) clearTimeout(recordTimer);
+
+                            if (currentLang === 'en') {
+                                issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
+                            } else {
+                                issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
+                            }
+
+                            setTimeout(() => {
+                                successMsg.classList.add('hidden');
+                            }, 6000);
+
+                        }, 500);
+                    }
+                });
+            }
         });
     </script>
 
 </body>
+
 </html>
+
+
 
 
