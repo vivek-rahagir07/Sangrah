@@ -191,7 +191,147 @@
             </div>
         </section>
 
-        <!-- START: RE-ADDED MISSING SECTIONS -->
+        <!-- MOVED: Report an Issue Section -->
+        <section id="report" class="py-20 bg-sangrah-gold-light">
+            <div class="container mx-auto max-w-4xl px-4">
+                <div class="grid md:grid-cols-2 gap-12 items-center fade-in-on-scroll">
+                    <!-- Form Text -->
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                            <span data-lang="en">Report an Issue Confidentially</span>
+                            <span data-lang="hi" class="hidden hindi">गोपनीय रूप से समस्या की रिपोर्ट करें</span>
+                        </h2>
+                        <p class="text-lg text-gray-700 mb-4">
+                            <span data-lang="en">If you are a campus worker facing a problem, please let us know. We are here to listen and help.</span>
+                            <span data-lang="hi" class="hidden hindi">यदि आप एक कैंपस कार्यकर्ता हैं जो किसी समस्या का सामना कर रहे हैं, तो कृपया हमें बताएं। हम सुनने और मदद करने के लिए यहां हैं।</span>
+                        </p>
+                        <p class="text-lg text-gray-700 font-semibold mb-4">
+                            <span data-lang="en">Your safety is our top priority.</span>
+                            <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा हमारी सर्वोच्च प्राथमिकता है।</span>
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-3">
+                            <li>
+                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your name.</span>
+                                <span data-lang="hi" class="hidden hindi">आपको अपना नाम बताने की <span class="font-bold">जरूरत नहीं है</span>।</span>
+                            </li>
+                            <li>
+                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your contact details.</span>
+                                <span data-lang="hi" class="hidden hindi">आपको अपना संपर्क विवरण देने की <span class="font-bold">आवश्यकता नहीं है</span>।</span>
+                            </li>
+                            <li>
+                                <span data-lang="en">This form is <span class="font-bold">100% anonymous</span> if you want it to be.</span>
+                                <span data-lang="hi" class="hidden hindi">यदि आप चाहें तो यह फॉर्म <span class="font-bold">100% गुमनाम</span> है।</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Form -->
+                    <div class="bg-white p-8 rounded-xl shadow-2xl">
+                        <!-- Success Message -->
+                        <div id="form-success" class="hidden p-4 mb-4 bg-green-100 text-green-800 border border-green-300 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">
+                                <span data-lang="en">Thank you!</span>
+                                <span data-lang="hi" class="hidden hindi">धन्यवाद!</span>
+                            </h4>
+                            <p data-lang="en">Your report has been submitted anonymously. A member of Sangrah will review it. We are here for you.</p>
+                            <p data-lang="hi" class="hidden hindi">आपकी रिपोर्ट गुमनाम रूप से सबमिट कर दी गई है। संग्रह का एक सदस्य इसकी समीक्षा करेगा। हम आप के लिए यहां हैं।</p>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="form-error" class="hidden p-4 mb-4 bg-red-100 text-red-800 border border-red-300 rounded-lg">
+                            <p data-lang="en">Please provide a description or a voice recording.</p>
+                            <p data-lang="hi" class="hidden hindi">कृपया विवरण दें या वॉयस रिकॉर्डिंग करें।</p>
+                        </div>
+
+                        <form id="report-form">
+                            <div class="mb-4">
+                                <label for="issue-type" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Type of Issue</span>
+                                    <span data-lang="hi" class="hidden hindi">समस्या का प्रकार</span>
+                                </label>
+                                <select id="issue-type" name="issue-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue">
+                                    <option value="" data-lang-en="Select an issue type" data-lang-hi="एक समस्या प्रकार चुनें">Select an issue type</option>
+                                    <option value="unpaid-wages" data-lang-en="Unpaid Wages / Payment Issues" data-lang-hi="अवैतनिक मजदूरी / भुगतान संबंधी समस्याएं">Unpaid Wages / Payment Issues</option>
+                                    <option value="disrespect" data-lang-en="Disrespectful Behavior (from students or staff)" data-lang-hi="अपमानजनक व्यवहार (छात्रों या कर्मचारियों से)">Disrespectful Behavior (from students or staff)</option>
+                                    <option value="safety" data-lang-en="Safety Concern" data-lang-hi="सुरक्षा चिंता">Safety Concern</option>
+                                    <option value="other" data-lang-en="Other Issue" data-lang-hi="अन्य समस्या">Other Issue</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Please describe the problem</span>
+                                    <span data-lang="hi" class="hidden hindi">कृपया समस्या का वर्णन करें</span>
+                                </label>
+                                <textarea id="description" name="description" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
+                                    data-placeholder-en="Please provide details. Who? When? Where?" 
+                                    data-placeholder-hi="कृपया विवरण प्रदान करें। कौन? कब? कहाँ?"
+                                    placeholder="Please provide details. Who? When? Where?"></textarea>
+                            </div>
+
+                            <!-- Voice Memo Divider -->
+                            <div class="relative flex items-center my-4">
+                                <div class="flex-grow border-t border-gray-300"></div>
+                                <span class="flex-shrink mx-2 text-sm text-gray-500">
+                                    <span data-lang="en">OR</span>
+                                    <span data-lang="hi" class="hidden hindi">या</span>
+                                </span>
+                                <div class="flex-grow border-t border-gray-300"></div>
+                            </div>
+
+                            <!-- Voice Memo Controls -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span data-lang="en">Record your problem (max 2 mins)</span>
+                                    <span data-lang="hi" class="hidden hindi">अपनी समस्या रिकॉर्ड करें (अधिकतम 2 मिनट)</span>
+                                </label>
+                                <div class="flex items-center space-x-2">
+                                    <button type="button" id="record-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300">
+                                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
+                                            <path d="M5.5 9.5A.5.5 0 0 1 6 9h.5v1a.5.5 0 0 1-1 0V9h-.5a.5.5 0 0 1-.5-.5Z" />
+                                            <path d="M8 9h.5v1a.5.5 0 0 1-1 0V9H8Z" />
+                                            <path d="M11 9h.5v1a.5.5 0 0 1-1 0V9h.5Z" />
+                                            <path d="M13.5 9.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V9h.5a.5.5 0 0 1 .5.5Z" />
+                                            <path d="M6 14a4 4 0 0 0 7.906 1.39.5.5 0 0 1 .888.441A5 5 0 0 1 5 14.5a.5.5 0 0 1 .806-.39A4 4 0 0 0 6 14Z" />
+                                        </svg>
+                                        <span data-lang="en">Record</span>
+                                        <span data-lang="hi" class="hidden hindi">रिकॉर्ड</span>
+                                    </button>
+                                    <button type="button" id="stop-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 hidden">
+                                        <svg class="w-5 h-5 mr-2 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 5h8a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-8Z" />
+                                        </svg>
+                                        <span data-lang="en">Stop</span>
+                                        <span data-lang="hi" class="hidden hindi">रुकें</span>
+                                    </button>
+                                </div>
+                                <div id="record-status" class="text-sm text-gray-600 mt-2"></div>
+                                <audio id="audio-playback" controls class="w-full mt-3 hidden"></audio>
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span data-lang="en">Your Contact (Optional)</span>
+                                    <span data-lang="hi" class="hidden hindi">आपका संपर्क (वैकल्पिक)</span>
+                                </label>
+                                <input type="text" id="contact" name="contact" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
+                                    data-placeholder-en="Phone or Email (only if you want a reply)"
+                                    data-placeholder-hi="फोन या ईमेल (केवल यदि आप जवाब चाहते हैं)"
+                                    placeholder="Phone or Email (only if you want a reply)">
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span data-lang="en">This is 100% optional. Leave it blank to stay anonymous.</span>
+                                    <span data-lang="hi" class="hidden hindi">यह 100% वैकल्पिक है। गुमनाम रहने के लिए इसे खाली छोड़ दें।</span>
+                                </p>
+                            </div>
+                            <button type="submit" id="submit-btn" class="w-full bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300">
+                                <span data-lang="en">Submit Anonymously</span>
+                                <span data-lang="hi" class="hidden hindi">गुमनाम रूप से सबमिट करें</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Full Form Creative Section -->
         <section id="full-form" class="py-20 bg-white">
@@ -396,152 +536,7 @@
             </div>
         </section>
 
-        <!-- Report an Issue Section -->
-        <section id="report" class="py-20 bg-sangrah-gold-light">
-            <div class="container mx-auto max-w-4xl px-4">
-                <div class="grid md:grid-cols-2 gap-12 items-center fade-in-on-scroll">
-                    <!-- Form Text -->
-                    <div>
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                            <span data-lang="en">Report an Issue Confidentially</span>
-                            <span data-lang="hi" class="hidden hindi">गोपनीय रूप से समस्या की रिपोर्ट करें</span>
-                        </h2>
-                        <p class="text-lg text-gray-700 mb-4">
-                            <span data-lang="en">If you are a campus worker facing a problem, please let us know. We are here to listen and help.</span>
-                            <span data-lang="hi" class="hidden hindi">यदि आप एक कैंपस कार्यकर्ता हैं जो किसी समस्या का सामना कर रहे हैं, तो कृपया हमें बताएं। हम सुनने और मदद करने के लिए यहां हैं।</span>
-                        </p>
-                        <p class="text-lg text-gray-700 font-semibold mb-4">
-                            <span data-lang="en">Your safety is our top priority.</span>
-                            <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा हमारी सर्वोच्च प्राथमिकता है।</span>
-                        </p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-3">
-                            <li>
-                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your name.</span>
-                                <span data-lang="hi" class="hidden hindi">आपको अपना नाम बताने की <span class="font-bold">जरूरत नहीं है</span>।</span>
-                            </li>
-                            <li>
-                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your contact details.</span>
-                                <span data-lang="hi" class="hidden hindi">आपको अपना संपर्क विवरण देने की <span class="font-bold">आवश्यकता नहीं है</span>।</span>
-                            </li>
-                            <li>
-                                <span data-lang="en">This form is <span class="font-bold">100% anonymous</span> if you want it to be.</span>
-                                <span data-lang="hi" class="hidden hindi">यदि आप चाहें तो यह फॉर्म <span class="font-bold">100% गुमनाम</span> है।</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Form -->
-                    <div class="bg-white p-8 rounded-xl shadow-2xl">
-                        <!-- Success Message -->
-                        <div id="form-success" class="hidden p-4 mb-4 bg-green-100 text-green-800 border border-green-300 rounded-lg">
-                            <h4 class="font-bold text-lg mb-2">
-                                <span data-lang="en">Thank you!</span>
-                                <span data-lang="hi" class="hidden hindi">धन्यवाद!</span>
-                            </h4>
-                            <p data-lang="en">Your report has been submitted anonymously. A member of Sangrah will review it. We are here for you.</p>
-                            <p data-lang="hi" class="hidden hindi">आपकी रिपोर्ट गुमनाम रूप से सबमिट कर दी गई है। संग्रह का एक सदस्य इसकी समीक्षा करेगा। हम आप के लिए यहां हैं।</p>
-                        </div>
-
-                        <!-- Error Message -->
-                        <div id="form-error" class="hidden p-4 mb-4 bg-red-100 text-red-800 border border-red-300 rounded-lg">
-                            <p data-lang="en">Please provide a description or a voice recording.</p>
-                            <p data-lang="hi" class="hidden hindi">कृपया विवरण दें या वॉयस रिकॉर्डिंग करें।</p>
-                        </div>
-
-                        <form id="report-form">
-                            <div class="mb-4">
-                                <label for="issue-type" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Type of Issue</span>
-                                    <span data-lang="hi" class="hidden hindi">समस्या का प्रकार</span>
-                                </label>
-                                <select id="issue-type" name="issue-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue">
-                                    <option value="" data-lang-en="Select an issue type" data-lang-hi="एक समस्या प्रकार चुनें">Select an issue type</option>
-                                    <option value="unpaid-wages" data-lang-en="Unpaid Wages / Payment Issues" data-lang-hi="अवैतनिक मजदूरी / भुगतान संबंधी समस्याएं">Unpaid Wages / Payment Issues</option>
-                                    <option value="disrespect" data-lang-en="Disrespectful Behavior (from students or staff)" data-lang-hi="अपमानजनक व्यवहार (छात्रों या कर्मचारियों से)">Disrespectful Behavior (from students or staff)</option>
-                                    <option value="safety" data-lang-en="Safety Concern" data-lang-hi="सुरक्षा चिंता">Safety Concern</option>
-                                    <option value="other" data-lang-en="Other Issue" data-lang-hi="अन्य समस्या">Other Issue</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Please describe the problem</span>
-                                    <span data-lang="hi" class="hidden hindi">कृपया समस्या का वर्णन करें</span>
-                                </label>
-                                <textarea id="description" name="description" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
-                                    data-placeholder-en="Please provide details. Who? When? Where?" 
-                                    data-placeholder-hi="कृपया विवरण प्रदान करें। कौन? कब? कहाँ?"
-                                    placeholder="Please provide details. Who? When? Where?"></textarea>
-                            </div>
-
-                            <!-- Voice Memo Divider -->
-                            <div class="relative flex items-center my-4">
-                                <div class="flex-grow border-t border-gray-300"></div>
-                                <span class="flex-shrink mx-2 text-sm text-gray-500">
-                                    <span data-lang="en">OR</span>
-                                    <span data-lang="hi" class="hidden hindi">या</span>
-                                </span>
-                                <div class="flex-grow border-t border-gray-300"></div>
-                            </div>
-
-                            <!-- Voice Memo Controls -->
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span data-lang="en">Record your problem (max 2 mins)</span>
-                                    <span data-lang="hi" class="hidden hindi">अपनी समस्या रिकॉर्ड करें (अधिकतम 2 मिनट)</span>
-                                </label>
-                                <div class="flex items-center space-x-2">
-                                    <button type="button" id="record-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300">
-                                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
-                                            <path d="M5.5 9.5A.5.5 0 0 1 6 9h.5v1a.5.5 0 0 1-1 0V9h-.5a.5.5 0 0 1-.5-.5Z" />
-                                            <path d="M8 9h.5v1a.5.5 0 0 1-1 0V9H8Z" />
-                                            <path d="M11 9h.5v1a.5.5 0 0 1-1 0V9h.5Z" />
-                                            <path d="M13.5 9.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V9h.5a.5.5 0 0 1 .5.5Z" />
-                                            <path d="M6 14a4 4 0 0 0 7.906 1.39.5.5 0 0 1 .888.441A5 5 0 0 1 5 14.5a.5.5 0 0 1 .806-.39A4 4 0 0 0 6 14Z" />
-                                        </svg>
-                                        <span data-lang="en">Record</span>
-                                        <span data-lang="hi" class="hidden hindi">रिकॉर्ड</span>
-                                    </button>
-                                    <button type="button" id="stop-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 hidden">
-                                        <svg class="w-5 h-5 mr-2 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 5h8a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-8Z" />
-                                        </svg>
-                                        <span data-lang="en">Stop</span>
-                                        <span data-lang="hi" class="hidden hindi">रुकें</span>
-                                    </button>
-                                </div>
-                                <div id="record-status" class="text-sm text-gray-600 mt-2"></div>
-                                <audio id="audio-playback" controls class="w-full mt-3 hidden"></audio>
-                            </div>
-
-                            <div class="mb-6">
-                                <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Your Contact (Optional)</span>
-                                    <span data-lang="hi" class="hidden hindi">आपका संपर्क (वैकल्पिक)</span>
-                                </label>
-                                <input type="text" id="contact" name="contact" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
-                                    data-placeholder-en="Phone or Email (only if you want a reply)"
-                                    data-placeholder-hi="फोन या ईमेल (केवल यदि आप जवाब चाहते हैं)"
-                                    placeholder="Phone or Email (only if you want a reply)">
-                                <p class="text-xs text-gray-500 mt-1">
-                                    <span data-lang="en">This is 100% optional. Leave it blank to stay anonymous.</span>
-                                    <span data-lang="hi" class="hidden hindi">यह 100% वैकल्पिक है। गुमनाम रहने के लिए इसे खाली छोड़ दें।</span>
-                                </p>
-                            </div>
-                            <button type="submit" id="submit-btn" class="w-full bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300">
-                                <span data-lang="en">Submit Anonymously</span>
-                                <span data-lang="hi" class="hidden hindi">गुमनाम रूप से सबमिट करें</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- END: RE-ADDED MISSING SECTIONS -->
-
-
-        <!-- NEW: FAQ Section -->
+        <!-- FAQ Section -->
         <section id="faq" class="py-20 bg-gray-100">
             <div class="container mx-auto max-w-3xl px-4">
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -557,8 +552,8 @@
                         <h2>
                             <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
                                 <span class="flex-1">
-                                    <span data-lang="en">Is my report really 100% anonymous?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या मेरी रिपोर्ट सचमुच 100% गुमनाम है?</span>
+                                    <span data-lang="en">What is Sangrah?</span>
+                                    <span data-lang="hi" class="hidden hindi">संग्रह क्या है?</span>
                                 </span>
                                 <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -567,10 +562,10 @@
                         </h2>
                         <div class="faq-answer hidden p-6 pt-0 text-gray-600">
                             <p data-lang="en">
-                                Yes. The form does not track your identity. If you do not provide your name or contact details, we have no way of knowing who you are. We designed it this way so you can report issues safely.
+                                Sangrah is a student-led society started at BML Munjal University. Its aim is to understand the problems and needs of the university’s working staff and help them connect with the appropriate university departments.
                             </p>
                             <p data-lang="hi" class="hidden hindi">
-                                हाँ। फॉर्म आपकी पहचान को ट्रैक नहीं करता है। यदि आप अपना नाम या संपर्क विवरण प्रदान नहीं करते हैं, तो हमारे पास यह जानने का कोई तरीका नहीं है कि आप कौन हैं। हमने इसे इस तरह से डिज़ाइन किया है ताकि आप सुरक्षित रूप से समस्याओं की रिपोर्ट कर सकें।
+                                संग्रह बीएमएल मुंजाल विश्वविद्यालय के छात्रों द्वारा शुरू की गई एक संस्था है। इसका उद्देश्य विश्वविद्यालय में काम करने वाले कर्मचारियों की समस्याओं और आवश्यकताओं को समझना तथा उन्हें उचित विभाग से जोड़ने में सहायता करना है।
                             </p>
                         </div>
                     </div>
@@ -579,8 +574,8 @@
                         <h2>
                             <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
                                 <span class="flex-1">
-                                    <span data-lang="en">Who can join Sangrah?</span>
-                                    <span data-lang="hi" class="hidden hindi">संग्रह में कौन शामिल हो सकता है?</span>
+                                    <span data-lang="en">Can I reach out to Sangrah?</span>
+                                    <span data-lang="hi" class="hidden hindi">संग्रह से कौन संपर्क कर सकता है?</span>
                                 </span>
                                 <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -589,10 +584,10 @@
                         </h2>
                         <div class="faq-answer hidden p-6 pt-0 text-gray-600">
                             <p data-lang="en">
-                                Sangrah is a student-led initiative. We welcome all current BMU students (from any program) who are passionate about worker rights and building a more empathetic campus community.
+                                Primarily, any member of the campus workforce — for example, housekeeping staff, guards, gardeners, helpers, or contract workers — can talk to us. However, we are open to hearing the concerns of anyone in need.
                             </p>
                             <p data-lang="hi" class="hidden hindi">
-                                संग्रह एक छात्र-नेतृत्व वाली पहल है। हम सभी वर्तमान बीएमयू छात्रों (किसी भी कार्यक्रम से) का स्वागत करते हैं जो कार्यकर्ता अधिकारों और अधिक सहानुभूतिपूर्ण परिसर समुदाय के निर्माण के बारे में भावुक हैं।
+                                मुख्य रूप से विश्वविद्यालय परिसर में कार्यरत कर्मचारी — जैसे सफाई कर्मचारी, सुरक्षा गार्ड, माली, हेल्पर या ठेके पर काम करने वाले व्यक्ति — हमसे बात कर सकते हैं। फिर भी, हम किसी भी ज़रूरतमंद व्यक्ति की चिंताओं को सुनने के लिए हमेशा तैयार हैं।
                             </p>
                         </div>
                     </div>
@@ -601,8 +596,8 @@
                         <h2>
                             <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
                                 <span class="flex-1">
-                                    <span data-lang="en">What happens after I submit a report?</span>
-                                    <span data-lang="hi" class="hidden hindi">रिपोर्ट सबमिट करने के बाद क्या होता है?</span>
+                                    <span data-lang="en">What kind of issues can I share with Sangrah?</span>
+                                    <span data-lang="hi" class="hidden hindi">मैं संग्रह से किस प्रकार की समस्याएँ साझा कर सकता हूँ?</span>
                                 </span>
                                 <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -611,10 +606,274 @@
                         </h2>
                         <div class="faq-answer hidden p-6 pt-0 text-gray-600">
                             <p data-lang="en">
-                                A dedicated member of the Sangrah team reviews every report. We document the issue and, if it's a pattern, we escalate it (anonymously) to the university administration or the relevant contractors. If you provide contact details and ask for help, we will reach out to you directly to see how we can support you.
+                                You can share issues such as payment delays, safety concerns, health problems, working hours, lack of rest time, or difficulties in communicating with the university.
                             </p>
                             <p data-lang="hi" class="hidden hindi">
-                                संग्रह टीम का एक समर्पित सदस्य हर रिपोर्ट की समीक्षा करता है। हम मुद्दे का दस्तावेजीकरण करते हैं और, यदि यह एक पैटर्न है, तो हम इसे (गुमनाम रूप से) विश्वविद्यालय प्रशासन या संबंधित ठेकेदारों तक पहुंचाते हैं। यदि आप संपर्क विवरण प्रदान करते हैं और मदद मांगते हैं, तो हम आपसे सीधे संपर्क करेंगे कि हम आपकी कैसे सहायता कर सकते हैं।
+                                आप वेतन में देरी, सुरक्षा से जुड़ी चिंताएँ, स्वास्थ्य संबंधी परेशानी, कार्य के घंटे, आराम के समय की कमी या विश्वविद्यालय से संवाद करने में कठिनाई जैसी समस्याएँ हमारे साथ साझा कर सकते हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 4 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Are you part of the university administration?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह विश्वविद्यालय प्रशासन का हिस्सा है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                No, Sangrah is run by students. We are not an official department but we work to build communication between workers and the administration.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                नहीं, संग्रह छात्रों द्वारा चलाया जाता है। हम किसी विभाग का हिस्सा नहीं हैं, बल्कि कामगारों और प्रशासन के बीच संवाद बनाने का प्रयास करते हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 5 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Will Sangrah definitely solve my problem?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह मेरी समस्या का हल ज़रूर करेगा?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                We cannot promise every issue will be solved, but we will do our best to take it to the right people and follow up.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हम यह वादा नहीं कर सकते कि हर समस्या का हल मिलेगा, लेकिन हम पूरी कोशिश करेंगे कि आपकी बात सही लोगों तक पहुँचे और उस पर कार्रवाई हो।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 6 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Does Sangrah charge any money?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह कोई पैसे लेता है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                No, Sangrah’s help is completely free. Students volunteer their time to help.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                नहीं, संग्रह की मदद पूरी तरह नि:शुल्क है। छात्र स्वेच्छा से अपना समय देते हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 7 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">How can I contact Sangrah?</span>
+                                    <span data-lang="hi" class="hidden hindi">मैं संग्रह से कैसे संपर्क कर सकता हूँ?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                You can visit our help desk on campus, send a message on WhatsApp, or talk to a Sangrah volunteer.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                आप कैंपस में बने हेल्प डेस्क पर आ सकते हैं, व्हाट्सएप पर संदेश भेज सकते हैं, या किसी संग्रह स्वयंसेवक से सीधे बात कर सकते हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 8 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">When is Sangrah available to meet?</span>
+                                    <span data-lang="hi" class="hidden hindi">संग्रह से मिलने का समय कब है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                You can reach out to us anytime through our online website, WhatsApp message, or by emailing us. You can also meet our student volunteer members during the weekly open hours announced on the notice board or WhatsApp group.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                आप हमसे किसी भी समय हमारी वेबसाइट, व्हाट्सएप संदेश या ईमेल के माध्यम से संपर्क कर सकते हैं। इसके अलावा, हमारे छात्र स्वयंसेवकों से मिलने के लिए प्रत्येक सप्ताह निर्धारित खुले घंटे रखे जाते हैं, जिनकी जानकारी नोटिस बोर्ड और व्हाट्सएप ग्रुप पर दी जाएगी।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 9 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Will my name and details be kept private?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या मेरी जानकारी गोपनीय रखी जाएगी?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Yes, if you want your details to stay private, we will not share them without your permission.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हाँ, अगर आप चाहें तो आपकी जानकारी पूरी तरह गोपनीय रखी जाएगी और बिना आपकी अनुमति के साझा नहीं की जाएगी।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 10 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">What if I can’t write or read properly?</span>
+                                    <span data-lang="hi" class="hidden hindi">अगर मैं ठीक से लिख या पढ़ नहीं सकता तो क्या करूँ?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                That’s okay! You can talk to any Sangrah volunteer in person — we will note down your concern for you.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                कोई बात नहीं! आप किसी संग्रह स्वयंसेवक से सीधे बात कर सकते हैं — हम आपकी बात अपने हाथ से लिख लेंगे।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 11 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Can I share suggestions or good experiences too?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या मैं सुझाव या अच्छी बातें भी साझा कर सकता हूँ?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Yes! Sangrah is not only for complaints — we want to hear your ideas and positive stories too.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हाँ! संग्रह केवल शिकायतों के लिए नहीं है — हम आपके सुझाव और अच्छे अनुभव भी सुनना चाहते हैं।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 12 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Will university officials listen to Sangrah’s reports?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या विश्वविद्यालय प्रशासन संग्रह की बात सुनेगा?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                We will share your issues respectfully and clearly with university authorities. We hope this helps them understand and act faster.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हम आपकी समस्याएँ सम्मानपूर्वक विश्वविद्यालय के अधिकारियों तक पहुँचाते हैं। हमें उम्मीद है कि इससे समाधान जल्दी होगा।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 13 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Can Sangrah help in emergencies?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह आपात स्थिति में मदद कर सकता है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                If there’s an urgent health or safety issue, we can help connect you quickly to the concerned department or medical help.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                अगर कोई स्वास्थ्य या सुरक्षा संबंधी आपात स्थिति है, तो हम आपको तुरंत संबंधित विभाग या चिकित्सा सहायता से जोड़ने की कोशिश करेंगे।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 14 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Can I join Sangrah or help in any way?</span>
+                                    <span data-lang="hi" class="hidden hindi">क्या मैं संग्रह का हिस्सा बन सकता हूँ या मदद कर सकता हूँ?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Yes, if you are interested, you can volunteer or share ideas. We believe change happens when everyone participates.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                हाँ, अगर आप चाहें तो स्वयंसेवक बन सकते हैं या सुझाव दे सकते हैं। हम मानते हैं कि बदलाव सबकी भागीदारी से आता है।
+                            </p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 15 -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <h2>
+                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
+                                <span class="flex-1">
+                                    <span data-lang="en">Why is it called “Sangrah”?</span>
+                                    <span data-lang="hi" class="hidden hindi">इसका नाम “संग्रह” क्यों रखा गया है?</span>
+                                </span>
+                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
+                            <p data-lang="en">
+                                Because Sangrah means collection or coming together — a place where every person’s voice matters and is valued.
+                            </p>
+                            <p data-lang="hi" class="hidden hindi">
+                                क्योंकि “संग्रह” का मतलब है — सबको जोड़ना, सबकी बातों और अनुभवों को एक जगह लाना। यही हमारी सोच है।
                             </p>
                         </div>
                     </div>
@@ -639,11 +898,19 @@
                         समुदाय बनाने में हमारी मदद करें। आपकी आवाज़, आपका समय और आपकी सहानुभूति वास्तविक परिवर्तन ला सकती
                         है।
                     </p>
-                    <a href="mailto:sangrah.bmu@example.com"
-                        class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
-                        <span data-lang="en">Contact Us to Join</span>
-                        <span data-lang="hi" class="hidden hindi">शामिल होने के लिए संपर्क करें</span>
-                    </a>
+                    <!-- Updated Links -->
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer"
+                            class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
+                            <span data-lang="en">Join Student WhatsApp</span>
+                            <span data-lang="hi" class="hidden hindi">छात्र व्हाट्सएप से जुड़ें</span>
+                        </a>
+                        <a href="mailto:tisha.sharma.21bbl@bmu.edu.in"
+                            class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg">
+                            <span data-lang="en">Email Us to Join</span>
+                            <span data-lang="hi" class="hidden hindi">शामिल होने के लिए ईमेल करें</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -651,15 +918,59 @@
 
     <footer class="bg-gray-800 text-gray-300 py-12">
         <div class="container mx-auto max-w-6xl px-4 text-center">
-            <a href="#" class="inline-flex items-center space-x-2 text-3xl text-white mb-4">
+            <a href="#" class="inline-flex items-center space-x-2 text-3xl text-white mb-6">
                 <img src="photoes/sangrah.jpeg" alt="Sangrah Logo" class="w-8 h-8 rounded-full">
                 <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
                 <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
             </a>
+            
+            <!-- Contact Links -->
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold text-white mb-4">
+                    <span data-lang="en">Get in Touch</span>
+                    <span data-lang="hi" class="hidden hindi">संपर्क करें</span>
+                </h4>
+                <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-gray-300">
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/sangrah_bmu?igsh=MXF1eXg0MXd1dzczYQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85C2.53 3.855 4.047 2.309 7.299 2.231c1.266-.058 1.646-.07 4.851-.07Zm0 2.163c-3.076 0-3.446.012-4.64.068-2.612.122-3.84 1.35-3.962 3.962-.056 1.193-.068 1.563-.068 4.64s.012 3.446.068 4.64c.122 2.611 1.35 3.84 3.962 3.962 1.193.056 1.563.068 4.64.068s3.446-.012 4.64-.068c2.612-.122 3.84-1.35 3.962-3.962.056-1.193.068-1.563.068-4.64s-.012-3.446-.068-4.64c-.122-2.611-1.35-3.84-3.962-3.962C15.446 4.337 15.076 4.326 12 4.326ZM12 9.25a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm0 7.668a4.918 4.918 0 1 1 0-9.836 4.918 4.918 0 0 1 0 9.836ZM16.5 7.75a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5Z" clip-rule="evenodd" /></svg>
+                        <span class="hidden sm:inline">Instagram</span>
+                    </a>
+                    <!-- Email Tisha -->
+                    <a href="mailto:tisha.sharma.21bbl@bmu.edu.in" class="flex items-center space-x-2 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" /><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" /></svg>
+                        <span class="hidden sm:inline">Tisha Sharma</span>
+                    </a>
+                    <!-- Email Hema -->
+                    <a href="mailto:hema.gariya.21bbl@bmu.edu.in" class="flex items-center space-x-2 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" /><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" /></svg>
+                        <span class="hidden sm:inline">Hema Gariya</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- WhatsApp Links -->
+            <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                <a href="https://chat.whatsapp.com/GmyJWMwAZq5DFsZwmtSZUl" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
+                    <span class="font-semibold">
+                        <span data-lang="en">WhatsApp for Workers</span>
+                        <span data-lang="hi" class="hidden hindi">कार्यकर्ताओं के लिए व्हाट्सएप</span>
+                    </span>
+                </a>
+                <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
+                    <span class="font-semibold">
+                        <span data-lang="en">WhatsApp for Students</span>
+                        <span data-lang="hi" class="hidden hindi">छात्रों के लिए व्हाट्सएप</span>
+                    </span>
+                </a>
+            </div>
+            
             <p class="text-gray-400 mb-2">
                 <span data-lang="en">A BMU student community for worker solidarity.</span>
                 <span data-lang="hi" class="hidden hindi">कार्यकर्ता एकजुटता के लिए एक बीएमयू छात्र समुदाय।</span>
-            </D>
+            </p>
             <p class="text-sm">
                 &copy; <span id="current-year"></span>
                 <span data-lang="en">Sangrah. All rights reserved.</span>
@@ -955,7 +1266,5 @@
 </body>
 
 </html>
-
-
 
 
