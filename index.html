@@ -9,14 +9,126 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700&family=Eczar:wght@700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;700&family=Eczar:wght@600;700&display=swap"
         rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sangrah-blue': {
+                            DEFAULT: '#2563eb', // blue-600
+                            light: '#60a5fa',   // blue-400
+                            dark: '#1e40af',    // blue-800
+                            bg: '#eff6ff',      // blue-50
+                        },
+                        'sangrah-gold': {
+                            DEFAULT: '#f59e0b', // amber-500
+                            light: '#fcd34d',   // amber-300
+                            dark: '#b45309',    // amber-700
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        hindi: ['Noto Sans Devanagari', 'sans-serif'],
+                        'brand-en': ['Kanit', 'sans-serif'],
+                        'brand-hi': ['Eczar', 'serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+            overflow-x: hidden;
+        }
+
+        /* Canvas Background */
+        #community-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Gradient overlay on top of canvas for softness */
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(240,249,255,0.4));
+        }
+
+        /* Ambient Blobs behind canvas */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -2;
+            opacity: 0.6;
+            animation: blob 10s infinite alternate;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        /* 3D Tilt Effect Class */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, #2563eb, #f59e0b);
+            z-index: 100;
+            width: 0%;
+            transition: width 0.1s ease-out;
         }
 
         .hindi {
@@ -26,894 +138,407 @@
 
         .font-brand-en {
             font-family: 'Kanit', sans-serif;
-            font-weight: 700;
             letter-spacing: 0.05em;
         }
 
         .font-brand-hi {
             font-family: 'Eczar', serif;
-            font-weight: 700;
             font-size: 0.9em;
             position: relative;
             top: 0.05em;
         }
         
-        /* --- Animation Utility (from previous version) --- */
         .fade-in-on-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .fade-in-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        /* --- Hero Background Gradient (from previous version) --- */
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 35%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 35%);
-            z-index: 0;
+
+        html {
+            scroll-padding-top: 90px;
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sangrah-blue': {
-                            DEFAULT: '#2563eb', // blue-600
-                            light: '#bfdbfe',   // blue-200
-                            dark: '#1d4ed8',    // blue-700
-                        },
-                        'sangrah-gold': {
-                            DEFAULT: '#f59e0b', // amber-500
-                            light: '#fef3c7',   // amber-100
-                            dark: '#b45309',    // amber-700
-                        }
-                    },
-                    // Added font families from previous version for consistency
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        hindi: ['Noto Sans Devanagari', 'sans-serif'],
-                        'brand-en': ['Kanit', 'sans-serif'],
-                        'brand-hi': ['Eczar', 'serif'],
-                    },
-                }
-            }
-        }
-    </script>
 </head>
 
-<body class="bg-gray-50 text-gray-800 antialiased">
+<body class="text-gray-800 antialiased selection:bg-sangrah-blue selection:text-white">
 
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-3 text-4xl text-sangrah-blue">
-                <img src="photoes/sangrah.jpeg" alt="Sangrah Logo" class="w-11 h-11 rounded-full">
-                <span data-lang="en" class="font-brand-en uppercase">SANGRAH</span>
-                <span data-lang="hi" class="hidden hindi font-brand-hi uppercase">संग्रह</span>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Animated Background Elements -->
+    <canvas id="community-canvas"></canvas>
+    <div class="ambient-blob w-96 h-96 bg-blue-300 top-0 left-0"></div>
+    <div class="ambient-blob w-96 h-96 bg-amber-200 bottom-0 right-0 animation-delay-2000"></div>
+    <div class="ambient-blob w-80 h-80 bg-pink-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animation-delay-4000"></div>
+
+    <!-- Navigation -->
+    <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto max-w-7xl px-4 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3 group relative z-10">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-amber-400 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-500"></div>
+                    <img src="photoes/sangrah.jpeg" alt="Sangrah Logo" class="relative w-11 h-11 rounded-full border-2 border-white/80 shadow-md">
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span data-lang="en" class="font-brand-en text-2xl text-sangrah-blue tracking-wide drop-shadow-sm">SANGRAH</span>
+                    <span data-lang="hi" class="hidden hindi font-brand-hi text-2xl text-sangrah-blue">संग्रह</span>
+                </div>
             </a>
 
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="#about" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
-                    <span data-lang="en">About Us</span>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-2 bg-white/40 p-1.5 rounded-full border border-white/60 shadow-sm backdrop-blur-sm">
+                <a href="#about" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-sangrah-blue hover:bg-white/80 transition-all duration-300">
+                    <span data-lang="en">About</span>
                     <span data-lang="hi" class="hidden hindi">हमारे बारे में</span>
                 </a>
-                <a href="#mission" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
-                    <span data-lang="en">Our Mission</span>
-                    <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
+                <a href="#mission" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-sangrah-blue hover:bg-white/80 transition-all duration-300">
+                    <span data-lang="en">Mission</span>
+                    <span data-lang="hi" class="hidden hindi">मिशन</span>
                 </a>
-                <a href="#join" class="text-gray-600 hover:text-sangrah-blue transition duration-300">
-                    <span data-lang="en">Get Involved</span>
-                    <span data-lang="hi" class="hidden hindi">शामिल हों</span>
+                <a href="#join" class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:text-sangrah-blue hover:bg-white/80 transition-all duration-300">
+                    <span data-lang="en">Join</span>
+                    <span data-lang="hi" class="hidden hindi">जुड़ें</span>
                 </a>
-                <a href="#report"
-                    class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-2 px-4 rounded-lg shadow transition duration-300">
-                    <span data-lang="en">Report an Issue</span>
-                    <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
-                </a>
-                <button id="lang-toggle"
-                    class="text-gray-600 hover:text-sangrah-blue transition duration-300 font-semibold py-1 px-2 border border-gray-300 rounded-md text-sm">
-                    <span data-lang="en">हिंदी में देखें</span>
-                    <span data-lang="hi" class="hidden">View in English</span>
-                </button>
             </div>
 
-            <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
-                    </path>
+            <div class="hidden md:flex items-center space-x-4">
+                <button id="lang-toggle"
+                    class="text-gray-600 hover:text-sangrah-blue transition duration-300 font-bold py-2 px-4 border border-gray-300/50 rounded-full text-xs tracking-wide bg-white/50 hover:bg-white hover:shadow-md">
+                    <span data-lang="en">HI / EN</span>
+                    <span data-lang="hi" class="hidden">EN / HI</span>
+                </button>
+                <a href="#report"
+                    class="bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-6 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center gap-2">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span data-lang="en">Report Issue</span>
+                    <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-gray-700 bg-white/50 p-2.5 rounded-xl hover:bg-white transition-colors border border-gray-200/50">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
             </button>
         </nav>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t">
-            <a href="#about" class="block py-3 px-4 text-gray-600 hover:bg-gray-100 mobile-nav-link">
-                <span data-lang="en">About Us</span>
-                <span data-lang="hi" class="hidden hindi">हमारे बारे में</span>
-            </a>
-            <a href="#mission" class="block py-3 px-4 text-gray-600 hover:bg-gray-100 mobile-nav-link">
-                <span data-lang="en">Our Mission</span>
-                <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
-            </a>
-            <a href="#join" class="block py-3 px-4 text-gray-600 hover:bg-gray-100 mobile-nav-link">
-                <span data-lang="en">Get Involved</span>
-                <span data-lang="hi" class="hidden hindi">शामिल हों</span>
-            </a>
-            <a href="#report"
-                class="block py-3 px-6 text-center bg-sangrah-gold text-white font-bold m-4 rounded-lg mobile-nav-link">
-                <span data-lang="en">Report an Issue</span>
-                <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
-            </a>
-            <button id="mobile-lang-toggle"
-                class="block w-full text-left py-3 px-4 text-gray-600 hover:bg-gray-100 font-semibold">
-                <span data-lang="en">हिंदी में देखें</span>
-                <span data-lang="hi" class="hidden">View in English</span>
-            </button>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-xl border-t border-gray-100 shadow-2xl absolute w-full left-0 transition-all duration-300">
+            <div class="px-6 pt-4 pb-8 space-y-2">
+                <a href="#about" class="block py-3 px-4 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-sangrah-blue rounded-xl mobile-nav-link transition-colors">
+                    <span data-lang="en">About Us</span>
+                    <span data-lang="hi" class="hidden hindi">हमारे बारे में</span>
+                </a>
+                <a href="#mission" class="block py-3 px-4 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-sangrah-blue rounded-xl mobile-nav-link transition-colors">
+                    <span data-lang="en">Our Mission</span>
+                    <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
+                </a>
+                <a href="#join" class="block py-3 px-4 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-sangrah-blue rounded-xl mobile-nav-link transition-colors">
+                    <span data-lang="en">Get Involved</span>
+                    <span data-lang="hi" class="hidden hindi">शामिल हों</span>
+                </a>
+                <a href="#report"
+                    class="block mt-6 py-4 px-4 text-center bg-gray-900 text-white font-bold rounded-xl shadow-lg mobile-nav-link active:scale-95 transition-transform">
+                    <span data-lang="en">Report an Issue</span>
+                    <span data-lang="hi" class="hidden hindi">रिपोर्ट करें</span>
+                </a>
+                <button id="mobile-lang-toggle"
+                    class="block w-full text-center mt-3 py-3 px-4 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-bold border border-gray-200">
+                    <span data-lang="en">हिंदी में देखें</span>
+                    <span data-lang="hi" class="hidden">View in English</span>
+                </button>
+            </div>
         </div>
     </header>
 
     <main>
-        <!-- Hero Section (restored classes) -->
-        <section class="bg-sangrah-blue text-white py-20 md:py-32 relative overflow-hidden hero-bg">
+        <!-- Hero Section -->
+        <section class="relative pt-24 pb-36 lg:pt-40 lg:pb-48 overflow-hidden">
             <div class="container mx-auto max-w-6xl px-4 text-center relative z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-                    <span data-lang="en">Support & Solidarity on Campus</span>
-                    <span data-lang="hi" class="hidden hindi font-bold">कैंपस में समर्थन और एकजुटता</span>
-                </h1>
-                <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-10">
-                    <span data-lang="en">We are Sangrah, a BMU student community dedicated to ensuring the rights,
-                        respect, and well-being of every worker on our campus.</span>
-                    <span data-lang="hi" class="hidden hindi">हम संग्रह हैं, एक बीएमयू छात्र समुदाय जो हमारे कैंपस के हर
-                        कार्यकर्ता के अधिकारों, सम्मान और कल्याण को सुनिश्चित करने के लिए समर्पित है।</span>
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#report"
-                        class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
-                        <span data-lang="en">Report an Issue Safely</span>
-                        <span data-lang="hi" class="hidden hindi font-normal">सुरक्षित रूप से समस्या की रिपोर्ट
-                            करें</span>
-                    </a>
-                    <a href="#about"
-                        class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg">
-                        <span data-lang="en">Learn More About Us</span>
-                        <span data-lang="hi" class="hidden hindi font-normal">हमारे बारे में और जानें</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- MOVED: Report an Issue Section -->
-        <section id="report" class="py-20 bg-sangrah-gold-light">
-            <div class="container mx-auto max-w-4xl px-4">
-                <div class="grid md:grid-cols-2 gap-12 items-center fade-in-on-scroll">
-                    <!-- Form Text -->
-                    <div>
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                            <span data-lang="en">Report an Issue Confidentially</span>
-                            <span data-lang="hi" class="hidden hindi">गोपनीय रूप से समस्या की रिपोर्ट करें</span>
-                        </h2>
-                        <p class="text-lg text-gray-700 mb-4">
-                            <span data-lang="en">If you are a campus worker facing a problem, please let us know. We are here to listen and help.</span>
-                            <span data-lang="hi" class="hidden hindi">यदि आप एक कैंपस कार्यकर्ता हैं जो किसी समस्या का सामना कर रहे हैं, तो कृपया हमें बताएं। हम सुनने और मदद करने के लिए यहां हैं।</span>
-                        </p>
-                        <p class="text-lg text-gray-700 font-semibold mb-4">
-                            <span data-lang="en">Your safety is our top priority.</span>
-                            <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा हमारी सर्वोच्च प्राथमिकता है।</span>
-                        </p>
-                        <ul class="list-disc list-inside text-gray-700 space-y-3">
-                            <li>
-                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your name.</span>
-                                <span data-lang="hi" class="hidden hindi">आपको अपना नाम बताने की <span class="font-bold">जरूरत नहीं है</span>।</span>
-                            </li>
-                            <li>
-                                <span data-lang="en">You <span class="font-bold">do not</span> have to give your contact details.</span>
-                                <span data-lang="hi" class="hidden hindi">आपको अपना संपर्क विवरण देने की <span class="font-bold">आवश्यकता नहीं है</span>।</span>
-                            </li>
-                            <li>
-                                <span data-lang="en">This form is <span class="font-bold">100% anonymous</span> if you want it to be.</span>
-                                <span data-lang="hi" class="hidden hindi">यदि आप चाहें तो यह फॉर्म <span class="font-bold">100% गुमनाम</span> है।</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Form -->
-                    <div class="bg-white p-8 rounded-xl shadow-2xl">
-                        <!-- Success Message -->
-                        <div id="form-success" class="hidden p-4 mb-4 bg-green-100 text-green-800 border border-green-300 rounded-lg">
-                            <h4 class="font-bold text-lg mb-2">
-                                <span data-lang="en">Thank you!</span>
-                                <span data-lang="hi" class="hidden hindi">धन्यवाद!</span>
-                            </h4>
-                            <p data-lang="en">Your report has been submitted anonymously. A member of Sangrah will review it. We are here for you.</p>
-                            <p data-lang="hi" class="hidden hindi">आपकी रिपोर्ट गुमनाम रूप से सबमिट कर दी गई है। संग्रह का एक सदस्य इसकी समीक्षा करेगा। हम आप के लिए यहां हैं।</p>
-                        </div>
-
-                        <!-- Error Message -->
-                        <div id="form-error" class="hidden p-4 mb-4 bg-red-100 text-red-800 border border-red-300 rounded-lg">
-                            <p data-lang="en">Please provide a description or a voice recording.</p>
-                            <p data-lang="hi" class="hidden hindi">कृपया विवरण दें या वॉयस रिकॉर्डिंग करें।</p>
-                        </div>
-
-                        <form id="report-form">
-                            <div class="mb-4">
-                                <label for="issue-type" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Type of Issue</span>
-                                    <span data-lang="hi" class="hidden hindi">समस्या का प्रकार</span>
-                                </label>
-                                <select id="issue-type" name="issue-type" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue">
-                                    <option value="" data-lang-en="Select an issue type" data-lang-hi="एक समस्या प्रकार चुनें">Select an issue type</option>
-                                    <option value="unpaid-wages" data-lang-en="Unpaid Wages / Payment Issues" data-lang-hi="अवैतनिक मजदूरी / भुगतान संबंधी समस्याएं">Unpaid Wages / Payment Issues</option>
-                                    <option value="disrespect" data-lang-en="Disrespectful Behavior (from students or staff)" data-lang-hi="अपमानजनक व्यवहार (छात्रों या कर्मचारियों से)">Disrespectful Behavior (from students or staff)</option>
-                                    <option value="safety" data-lang-en="Safety Concern" data-lang-hi="सुरक्षा चिंता">Safety Concern</option>
-                                    <option value="other" data-lang-en="Other Issue" data-lang-hi="अन्य समस्या">Other Issue</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Please describe the problem</span>
-                                    <span data-lang="hi" class="hidden hindi">कृपया समस्या का वर्णन करें</span>
-                                </label>
-                                <textarea id="description" name="description" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
-                                    data-placeholder-en="Please provide details. Who? When? Where?" 
-                                    data-placeholder-hi="कृपया विवरण प्रदान करें। कौन? कब? कहाँ?"
-                                    placeholder="Please provide details. Who? When? Where?"></textarea>
-                            </div>
-
-                            <!-- Voice Memo Divider -->
-                            <div class="relative flex items-center my-4">
-                                <div class="flex-grow border-t border-gray-300"></div>
-                                <span class="flex-shrink mx-2 text-sm text-gray-500">
-                                    <span data-lang="en">OR</span>
-                                    <span data-lang="hi" class="hidden hindi">या</span>
-                                </span>
-                                <div class="flex-grow border-t border-gray-300"></div>
-                            </div>
-
-                            <!-- Voice Memo Controls -->
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span data-lang="en">Record your problem (max 2 mins)</span>
-                                    <span data-lang="hi" class="hidden hindi">अपनी समस्या रिकॉर्ड करें (अधिकतम 2 मिनट)</span>
-                                </label>
-                                <div class="flex items-center space-x-2">
-                                    <button type="button" id="record-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300">
-                                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M7 4a3 3 0 0 1 6 0v6a3 3 0 1 1-6 0V4Z" />
-                                            <path d="M5.5 9.5A.5.5 0 0 1 6 9h.5v1a.5.5 0 0 1-1 0V9h-.5a.5.5 0 0 1-.5-.5Z" />
-                                            <path d="M8 9h.5v1a.5.5 0 0 1-1 0V9H8Z" />
-                                            <path d="M11 9h.5v1a.5.5 0 0 1-1 0V9h.5Z" />
-                                            <path d="M13.5 9.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V9h.5a.5.5 0 0 1 .5.5Z" />
-                                            <path d="M6 14a4 4 0 0 0 7.906 1.39.5.5 0 0 1 .888.441A5 5 0 0 1 5 14.5a.5.5 0 0 1 .806-.39A4 4 0 0 0 6 14Z" />
-                                        </svg>
-                                        <span data-lang="en">Record</span>
-                                        <span data-lang="hi" class="hidden hindi">रिकॉर्ड</span>
-                                    </button>
-                                    <button type="button" id="stop-btn" class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 hidden">
-                                        <svg class="w-5 h-5 mr-2 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 5h8a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-8Z" />
-                                        </svg>
-                                        <span data-lang="en">Stop</span>
-                                        <span data-lang="hi" class="hidden hindi">रुकें</span>
-                                    </button>
-                                </div>
-                                <div id="record-status" class="text-sm text-gray-600 mt-2"></div>
-                                <audio id="audio-playback" controls class="w-full mt-3 hidden"></audio>
-                            </div>
-
-                            <div class="mb-6">
-                                <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <span data-lang="en">Your Contact (Optional)</span>
-                                    <span data-lang="hi" class="hidden hindi">आपका संपर्क (वैकल्पिक)</span>
-                                </label>
-                                <input type="text" id="contact" name="contact" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sangrah-blue" 
-                                    data-placeholder-en="Phone or Email (only if you want a reply)"
-                                    data-placeholder-hi="फोन या ईमेल (केवल यदि आप जवाब चाहते हैं)"
-                                    placeholder="Phone or Email (only if you want a reply)">
-                                <p class="text-xs text-gray-500 mt-1">
-                                    <span data-lang="en">This is 100% optional. Leave it blank to stay anonymous.</span>
-                                    <span data-lang="hi" class="hidden hindi">यह 100% वैकल्पिक है। गुमनाम रहने के लिए इसे खाली छोड़ दें।</span>
-                                </p>
-                            </div>
-                            <button type="submit" id="submit-btn" class="w-full bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300">
-                                <span data-lang="en">Submit Anonymously</span>
-                                <span data-lang="hi" class="hidden hindi">गुमनाम रूप से सबमिट करें</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Full Form Creative Section -->
-        <section id="full-form" class="py-20 bg-white">
-            <div class="container mx-auto max-w-6xl px-4">
-                <div class="text-center max-w-3xl mx-auto mb-16 fade-in-on-scroll">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        <span data-lang="en">What <span class="font-brand-en text-sangrah-blue">SANGRAH</span> Stands For</span>
-                        <span data-lang="hi" class="hidden hindi">क्या है <span class="font-brand-hi text-sangrah-blue">संग्रह</span> का मतलब</span>
-                    </h2>
-                    <p class="text-lg text-gray-600 mb-2" data-lang="en">
-                        Our name is our mission. Each letter represents a core value we are committed to.
-                    </p>
-                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
-                        हमारा नाम ही हमारा मिशन है। प्रत्येक अक्षर हमारे एक मूल मूल्य का प्रतिनिधित्व करता है जिसके लिए हम प्रतिबद्ध हैं।
-                    </p>
+                <div class="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full bg-white/60 border border-white/80 text-sangrah-blue text-xs font-bold tracking-widest uppercase shadow-sm animate-float backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span data-lang="en">Community First Initiative</span>
+                    <span data-lang="hi" class="hidden hindi">समुदाय प्रथम पहल</span>
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-on-scroll">
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">S</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Support & Solidarity</span>
-                                <span data-lang="hi" class="hidden hindi">समर्थन और एकजुटता</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Standing together with our campus workers.</span>
-                                <span data-lang="hi" class="hidden hindi">हमारे कैंपस कार्यकर्ताओं के साथ खड़े रहना।</span>
+                <h1 class="text-6xl md:text-8xl font-black text-gray-900 leading-tight mb-8 tracking-tight drop-shadow-sm">
+                    <span data-lang="en">Support & <span class="text-transparent bg-clip-text bg-gradient-to-r from-sangrah-blue to-cyan-500">Solidarity</span></span>
+                    <span data-lang="hi" class="hidden hindi"><span class="text-transparent bg-clip-text bg-gradient-to-r from-sangrah-blue to-cyan-500">समर्थन</span> और एकजुटता</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-600 font-medium max-w-3xl mx-auto mb-12 leading-relaxed">
+                    <span data-lang="en">We bridge the gap. Ensuring dignity, fair pay, and respect for every worker who makes our campus run.</span>
+                    <span data-lang="hi" class="hidden hindi">हम खाई को पाटते हैं। हमारे कैंपस को चलाने वाले हर कार्यकर्ता के लिए सम्मान, उचित वेतन और आदर सुनिश्चित करना।</span>
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#report"
+                        class="group relative bg-sangrah-blue hover:bg-sangrah-blue-dark text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl hover:shadow-blue-500/30 transform hover:-translate-y-1 transition-all duration-300 text-lg overflow-hidden">
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                        <span class="relative flex items-center justify-center gap-2">
+                            <span data-lang="en">Report Issue</span>
+                            <span data-lang="hi" class="hidden hindi">समस्या रिपोर्ट करें</span>
+                            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </a>
+                    <a href="#mission"
+                        class="bg-white/80 hover:bg-white text-gray-700 font-bold py-4 px-10 rounded-full shadow-lg hover:shadow-xl border border-white/50 backdrop-blur-sm transform hover:-translate-y-1 transition-all duration-300 text-lg">
+                        <span data-lang="en">Our Mission</span>
+                        <span data-lang="hi" class="hidden hindi">हमारा मिशन</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Issue Section -->
+        <section id="report" class="py-24 relative">
+            <div class="container mx-auto max-w-5xl px-4">
+                <div class="glass-card rounded-[2.5rem] p-8 md:p-14 shadow-2xl fade-in-on-scroll relative overflow-hidden">
+                    <!-- Decorative element -->
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-sangrah-blue via-purple-500 to-sangrah-gold"></div>
+
+                    <div class="grid md:grid-cols-2 gap-16">
+                        <!-- Left Content -->
+                        <div class="flex flex-col justify-center">
+                            <div class="inline-flex items-center gap-2 text-amber-600 font-bold uppercase tracking-wider text-xs mb-6 bg-amber-50 px-3 py-1 rounded-lg w-fit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                <span data-lang="en">100% Confidential</span>
+                                <span data-lang="hi" class="hidden hindi">100% गोपनीय</span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                                <span data-lang="en">Your Safety,<br>Our Priority.</span>
+                                <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा,<br>हमारी प्राथमिकता।</span>
+                            </h2>
+                            <p class="text-lg text-gray-600 mb-10 leading-relaxed">
+                                <span data-lang="en">Facing issues with wages, respect, or safety? Tell us anonymously. We represent you without revealing your identity.</span>
+                                <span data-lang="hi" class="hidden hindi">वेतन, सम्मान या सुरक्षा के मुद्दों का सामना कर रहे हैं? हमें गुमनाम रूप से बताएं। हम आपकी पहचान उजागर किए बिना आपका प्रतिनिधित्व करते हैं।</span>
                             </p>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-center gap-5 p-4 rounded-2xl bg-white/50 border border-white/60 shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 text-white shadow-lg shadow-green-200">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 text-lg" data-lang="en">Anonymous Reporting</h4>
+                                        <h4 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">गुमनाम रिपोर्टिंग</h4>
+                                        <p class="text-sm text-gray-500" data-lang="en">No names asked. No tracking.</p>
+                                        <p class="text-sm text-gray-500 hidden hindi" data-lang="hi">कोई नाम नहीं। कोई ट्रैकिंग नहीं।</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-5 p-4 rounded-2xl bg-white/50 border border-white/60 shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 text-white shadow-lg shadow-blue-200">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 text-lg" data-lang="en">Voice Message</h4>
+                                        <h4 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">वॉयस संदेश</h4>
+                                        <p class="text-sm text-gray-500" data-lang="en">Easier than typing. Just record.</p>
+                                        <p class="text-sm text-gray-500 hidden hindi" data-lang="hi">टाइपिंग से आसान। बस रिकॉर्ड करें।</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">A</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Assistance</span>
-                                <span data-lang="hi" class="hidden hindi">वकालत</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Championing fair pay, respect, and safe conditions.</span>
-                                <span data-lang="hi" class="hidden hindi">उचित वेतन, सम्मान और सुरक्षित स्थितियों की वकालत करना।</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">N</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Nurturing</span>
-                                <span data-lang="hi" class="hidden hindi">पोषण</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Fostering a sense of belonging for everyone.</span>
-                                <span data-lang="hi" class="hidden hindi">सभी के लिए अपनेपन की भावना को बढ़ावा देना।</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">G</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Guiding Growth</span>
-                                <span data-lang="hi" class="hidden hindi">विकास में मार्गदर्शन</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Helping our community grow with empathy.</span>
-                                <span data-lang="hi" class="hidden hindi">हमारे समुदाय को सहानुभूति के साथ बढ़ने में मदद करना।</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">R</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Respect</span>
-                                <span data-lang="hi" class="hidden hindi">सम्मान</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Bridging the gap between students and workers.</span>
-                                <span data-lang="hi" class="hidden hindi">छात्रों और कार्यकर्ताओं के बीच की खाई को पाटना।</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">A</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Action</span>
-                                <span data-lang="hi" class="hidden hindi">कार्रवाई</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">Taking informed steps to create real change.</span>
-                                <span data-lang="hi" class="hidden hindi">वास्तविक परिवर्तन लाने के लिए सूचित कदम उठाना।</span>
-                            </S>
-                        </div>
-                    </div>
-                    <div class="relative p-6 bg-gray-50 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                        <span class="absolute -top-4 -left-4 text-8xl font-brand-en text-blue-200 opacity-60" aria-hidden="true">H</span>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">
-                                <span data-lang="en">Helping Hands</span>
-                                <span data-lang="hi" class="hidden hindi">मददगार हाथ</span>
-                            </h3>
-                            <p class="text-gray-600">
-                                <span data-lang="en">We are the students who are here to help.</span>
-                                <span data-lang="hi" class="hidden hindi">हम वे छात्र हैं जो मदद के लिए यहां हैं।</span>
-                            </p>
+                        
+                        <!-- Right Content (Form) -->
+                        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl relative">
+                            <form id="report-form" class="space-y-6">
+                                <!-- Success/Error Messages -->
+                                <div id="form-success" class="hidden p-4 bg-green-100 text-green-800 border border-green-200 rounded-xl text-sm flex items-start gap-3 shadow-inner">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    <div>
+                                        <strong class="block mb-1" data-lang="en">Received!</strong>
+                                        <strong class="block mb-1 hidden hindi" data-lang="hi">प्राप्त हुआ!</strong>
+                                        <span data-lang="en">Your report is safe with us.</span>
+                                        <span data-lang="hi" class="hidden hindi">आपकी रिपोर्ट हमारे पास सुरक्षित है।</span>
+                                    </div>
+                                </div>
+                                <div id="form-error" class="hidden p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl text-sm">
+                                    <span data-lang="en">Please enter text or record audio.</span>
+                                    <span data-lang="hi" class="hidden hindi">कृपया टेक्स्ट लिखें या ऑडियो रिकॉर्ड करें।</span>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1 transition-colors">
+                                        <span data-lang="en">Category</span>
+                                        <span data-lang="hi" class="hidden hindi">श्रेणी</span>
+                                    </label>
+                                    <div class="relative">
+                                        <select id="issue-type" class="w-full pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sangrah-blue focus:border-transparent focus:bg-white appearance-none transition-all cursor-pointer text-gray-700 font-medium hover:border-gray-300">
+                                            <option value="" data-lang-en="What is the issue regarding?" data-lang-hi="मुद्दा किस बारे में है?">What is the issue regarding?</option>
+                                            <option value="wages">Unpaid Wages / वेतन मुद्दे</option>
+                                            <option value="behavior">Disrespect / दुर्व्यवहार</option>
+                                            <option value="safety">Safety / सुरक्षा</option>
+                                            <option value="other">Other / अन्य</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1 transition-colors">
+                                        <span data-lang="en">Details</span>
+                                        <span data-lang="hi" class="hidden hindi">विवरण</span>
+                                    </label>
+                                    <textarea id="description" rows="4" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sangrah-blue focus:border-transparent focus:bg-white transition-all resize-none text-gray-700"
+                                        data-placeholder-en="Describe what happened..."
+                                        data-placeholder-hi="बताएं कि क्या हुआ..."
+                                        placeholder="Describe what happened..."></textarea>
+                                </div>
+
+                                <div class="relative py-2">
+                                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                                    <div class="relative flex justify-center text-[10px] font-bold tracking-widest text-gray-400 uppercase"><span class="bg-white px-2">Or Record Audio</span></div>
+                                </div>
+
+                                <!-- Audio Controls -->
+                                <div>
+                                    <div class="flex gap-3">
+                                        <button type="button" id="record-btn" class="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-red-50 text-red-500 hover:bg-red-50 hover:border-red-100 hover:text-red-600 py-3 rounded-xl transition-all font-bold shadow-sm hover:shadow">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                            <span data-lang="en">Tap to Record</span><span data-lang="hi" class="hidden hindi">रिकॉर्ड करें</span>
+                                        </button>
+                                        <button type="button" id="stop-btn" class="hidden flex-1 flex items-center justify-center gap-2 bg-red-500 text-white hover:bg-red-600 py-3 rounded-xl transition-all font-bold shadow-lg shadow-red-200 animate-pulse">
+                                            <div class="w-3 h-3 bg-white rounded-sm"></div>
+                                            <span data-lang="en">Stop Recording</span><span data-lang="hi" class="hidden hindi">रिकॉर्डिंग रोकें</span>
+                                        </button>
+                                    </div>
+                                    <div id="record-status" class="text-xs text-center mt-2 text-gray-500 h-5 font-medium"></div>
+                                    <audio id="audio-playback" controls class="w-full mt-3 hidden h-10 rounded-lg"></audio>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1 transition-colors">
+                                        <span data-lang="en">Contact (Optional)</span>
+                                        <span data-lang="hi" class="hidden hindi">संपर्क (वैकल्पिक)</span>
+                                    </label>
+                                    <input type="text" id="contact" class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sangrah-blue focus:border-transparent focus:bg-white transition-all text-gray-700" 
+                                        data-placeholder-en="Phone or Email (if you want a reply)"
+                                        data-placeholder-hi="फोन या ईमेल (यदि आप जवाब चाहते हैं)"
+                                        placeholder="Phone or Email (if you want a reply)">
+                                </div>
+
+                                <button type="submit" id="submit-btn" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-xl shadow-gray-200 hover:shadow-2xl transform hover:-translate-y-0.5 transition-all duration-300 text-lg flex items-center justify-center gap-2">
+                                    <span data-lang="en">Submit Report</span>
+                                    <span data-lang="hi" class="hidden hindi">रिपोर्ट सबमिट करें</span>
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- About Us Section -->
-        <section id="about" class="py-20 bg-gray-100">
-            <div class="container mx-auto max-w-6xl px-4">
-                <div class="grid grid-cols-1 gap-12 items-center">
-                    <div class="text-center max-w-3xl mx-auto fade-in-on-scroll">
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                            <span data-lang="en">Who We Are</span>
-                            <span data-lang="hi" class="hidden hindi">हम कौन हैं</span>
-                        </h2>
-                        <p class="text-lg text-gray-600 mb-4" data-lang="en">
-                            "Sangrah" (संग्रह) means "collection" or "community." We are a collection of students standing in solidarity with the campus workers who form the backbone of our university.
-                        </p>
-                        <p class="text-lg text-gray-700 mb-6 hindi hidden" data-lang="hi">
-                            "संग्रह" का अर्थ है "एकत्र करना" या "समुदाय"। हम उन कैंपस कार्यकर्ताओं के साथ एकजुटता से खड़े छात्रों का एक संग्रह हैं जो हमारे विश्वविद्यालय की रीढ़ हैं।
-                        </p>
-                        <p class="text-lg text-gray-600 mb-4" data-lang="en">
-                            Our mission is built on a foundation of empathy and action. We believe that every member of the BMU community deserves to be treated with dignity, paid fairly, and given a safe space to be heard.
-                        </p>
-                         <p class="text-lg text-gray-700 mb-6 hindi hidden" data-lang="hi">
-                            हमारा मिशन सहानुभूति और कार्रवाई की नींव पर बना है। हमारा मानना है कि बीएमयू समुदाय के प्रत्येक सदस्य को सम्मान के साथ व्यवहार करने, उचित भुगतान पाने और अपनी बात रखने के लिए एक सुरक्षित स्थान पाने का अधिकार है।
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Our Mission Section -->
-        <section id="mission" class="py-20 bg-white">
-            <div class="container mx-auto max-w-6xl px-4">
-                <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        <span data-lang="en">Our Mission: A Fair & Respectful Campus for All</span>
-                        <span data-lang="hi" class="hidden hindi">हमारा मिशन: सभी के लिए एक निष्पक्ष और सम्मानजनक कैंपस</span>
-                    </h2>
-                    <p class="text-lg text-gray-600 mb-2" data-lang="en">
-                        We've seen that many campus workers face serious challenges but fear speaking up. Sangrah exists to be their voice and their support system.
-                    </p>
-                    <p class="text-lg text-gray-700 hindi hidden" data-lang="hi">
-                        हमने देखा है कि कई कैंपस कार्यकर्ता गंभीर चुनौतियों का सामना करते हैं लेकिन बोलने से डरते हैं। संग्रह उनकी आवाज़ और उनका समर्थन प्रणाली बनने के लिए मौजूद है।
-                    </p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8 fade-in-on-scroll">
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.75A.75.75 0 0 1 3 4.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 12h-.75m0 0v-.75A.75.75 0 0 1 9 10.5h.75m0 0H21m-12 6.75v.75A.75.75 0 0 1 9 18h-.75m0 0v-.75A.75.75 0 0 1 9 16.5h.75m0 0H21m-9-3.75h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM12 18h.008v.008H12v-.008Z" />
-                        </svg>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
-                            <span data-lang="en">Assistance for Fair Pay</span>
-                            <span data-lang="hi" class="hidden hindi">उचित वेतन की वकालत</span>
-                        </h3>
-                        <p class="text-gray-600 mb-2" data-lang="en">
-                             We work to ensure fairness and equality for all workers in every aspect of their workplace experience.
-                        </p>
-                        <p class="text-gray-700 hindi hidden" data-lang="hi">
-                            हम कार्यस्थल पर अनुभव के प्रत्येक पहलू में सभी श्रमिकों के लिए निष्पक्षता और समानता सुनिश्चित करने के लिए काम करते हैं।
-                        </p>
-                    </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.31h5.513c.474 0 .727.559.347.857l-4.418 3.225a.563.563 0 0 0-.162.632l2.105 5.11c.206.502-.38.954-.857.653l-4.418-3.22a.563.563 0 0 0-.68 0L6.34 20.25c-.477.301-1.063-.151-.857-.653l2.105-5.11a.563.563 0 0 0-.162-.632L3.01 9.778c-.38-.297-.127-.857.347-.857h5.513a.563.563 0 0 0 .475-.31L11.48 3.5Z" />
-                        </svg>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
-                            <span data-lang="en">Fostering Respect</span>
-                            <span data-lang="hi" class="hidden hindi">सम्मान को बढ़ावा देना</span>
-                        </h3>
-                        <p class="text-gray-600 mb-2" data-lang="en">
-                            We mediate issues of disrespectful behavior, promoting a culture where students and workers treat each other as valued members of one community.
-                        </p>
-                         <p class="text-gray-700 hindi hidden" data-lang="hi">
-                            हम अपमानजनक व्यवहार के मुद्दों को संबोधित करते हैं और मध्यस्थता करते हैं, एक ऐसी संस्कृति को बढ़ावा देते हैं जहां छात्र और कार्यकर्ता एक-दूसरे को एक समुदाय के मूल्यवान सदस्यों के रूप में मानते हैं।
-                        </p>
-                    </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                        <svg class="w-16 h-16 text-sangrah-blue mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
-                        </svg>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
-                            <span data-lang="en">A Safe Space to Speak</span>
-                            <span data-lang="hi" class="hidden hindi">बोलने के लिए एक सुरक्षित जगह</span>
-                        </h3>
-                        <p class="text-gray-600 mb-2" data-lang="en">
-                            We provide a confidential and anonymous platform for workers to report problems without fear of backlash. Your voice is safe with us.
-                        </p>
-                        <p class="text-gray-700 hindi hidden" data-lang="hi">
-                            हम कार्यकर्ताओं को बिना किसी डर के समस्याओं की रिपोर्ट करने के लिए एक गोपनीय और गुमनाम मंच प्रदान करते हैं। आपकी आवाज़ हमारे पास सुरक्षित है।
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section id="faq" class="py-20 bg-gray-100">
-            <div class="container mx-auto max-w-3xl px-4">
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        <span data-lang="en">Frequently Asked Questions</span>
-                        <span data-lang="hi" class="hidden hindi">अक्सर पूछे जाने वाले प्रश्न</span>
+        <!-- Values Section -->
+        <section class="py-24 relative overflow-hidden">
+            <div class="container mx-auto max-w-6xl px-4 relative z-10">
+                <div class="text-center mb-20 fade-in-on-scroll">
+                    <span class="text-sangrah-blue font-bold tracking-widest text-sm uppercase mb-2 block">Our DNA</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        <span data-lang="en">The <span class="text-transparent bg-clip-text bg-gradient-to-r from-sangrah-blue to-purple-600">SANGRAH</span> Values</span>
+                        <span data-lang="hi" class="hidden hindi"><span class="text-sangrah-blue">संग्रह</span> के मूल्य</span>
                     </h2>
                 </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 fade-in-on-scroll">
+                    <!-- S -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.1s">
+                        <div class="w-16 h-16 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-sangrah-blue mb-4 group-hover:scale-110 transition-transform shadow-inner">S</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Support</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">समर्थन</h3>
+                        <p class="text-sm text-gray-500">Standing firmly together.</p>
+                    </div>
+                    <!-- A -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.2s">
+                        <div class="w-16 h-16 mx-auto bg-amber-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-amber-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">A</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Advocacy</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">वकालत</h3>
+                        <p class="text-sm text-gray-500">Championing rights.</p>
+                    </div>
+                    <!-- N -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.3s">
+                        <div class="w-16 h-16 mx-auto bg-pink-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-pink-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">N</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Nurturing</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">पोषण</h3>
+                        <p class="text-sm text-gray-500">Care for everyone.</p>
+                    </div>
+                    <!-- G -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.4s">
+                        <div class="w-16 h-16 mx-auto bg-green-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-green-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">G</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Growth</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">विकास</h3>
+                        <p class="text-sm text-gray-500">Evolving with empathy.</p>
+                    </div>
+                    <!-- R -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.5s">
+                        <div class="w-16 h-16 mx-auto bg-red-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-red-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">R</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Respect</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">सम्मान</h3>
+                        <p class="text-sm text-gray-500">Dignity for all.</p>
+                    </div>
+                    <!-- A -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.6s">
+                        <div class="w-16 h-16 mx-auto bg-violet-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-violet-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">A</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Action</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">कार्रवाई</h3>
+                        <p class="text-sm text-gray-500">Making change happen.</p>
+                    </div>
+                    <!-- H -->
+                    <div class="glass-card w-full sm:w-[calc(50%-12px)] md:w-[calc(25%-18px)] p-8 rounded-2xl text-center group cursor-default hover:-translate-y-2 hover:bg-white transition-all duration-300" style="animation-delay: 0.7s">
+                        <div class="w-16 h-16 mx-auto bg-cyan-50 rounded-2xl flex items-center justify-center text-3xl font-brand-en text-cyan-500 mb-4 group-hover:scale-110 transition-transform shadow-inner">H</div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1" data-lang="en">Humanity</h3>
+                        <h3 class="font-bold text-gray-900 text-lg hidden hindi" data-lang="hi">मानवता</h3>
+                        <p class="text-sm text-gray-500">Compassion first.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                <div class="space-y-4">
-                    <!-- FAQ Item 1 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">What is Sangrah?</span>
-                                    <span data-lang="hi" class="hidden hindi">संग्रह क्या है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
+        <!-- Join CTA -->
+        <section id="join" class="py-24">
+            <div class="container mx-auto max-w-4xl px-4 text-center">
+                <div class="bg-gray-900 rounded-[2.5rem] p-12 md:p-24 shadow-2xl text-white transform hover:scale-[1.01] transition-transform duration-500 fade-in-on-scroll relative overflow-hidden group">
+                    <!-- Hover Effect Background -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-sangrah-blue rounded-full filter blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="text-4xl md:text-6xl font-black mb-8 tracking-tight">
+                            <span data-lang="en">Be the Change.</span>
+                            <span data-lang="hi" class="hidden hindi">बदलाव बनें।</span>
                         </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Sangrah is a student-led society started at BML Munjal University. Its aim is to understand the problems and needs of the university’s working staff and help them connect with the appropriate university departments.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                संग्रह बीएमएल मुंजाल विश्वविद्यालय के छात्रों द्वारा शुरू की गई एक संस्था है। इसका उद्देश्य विश्वविद्यालय में काम करने वाले कर्मचारियों की समस्याओं और आवश्यकताओं को समझना तथा उन्हें उचित विभाग से जोड़ने में सहायता करना है।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 2 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Can I reach out to Sangrah?</span>
-                                    <span data-lang="hi" class="hidden hindi">संग्रह से कौन संपर्क कर सकता है?</span>
+                        <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                            <span data-lang="en">Your voice, time, and empathy can create a campus where everyone feels valued. Join the student movement today.</span>
+                            <span data-lang="hi" class="hidden hindi">आपकी आवाज़, समय और सहानुभूति एक ऐसा कैंपस बना सकती है जहाँ हर कोई सम्मानित महसूस करे। आज ही छात्र आंदोलन में शामिल हों।</span>
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-5">
+                            <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" 
+                               class="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 group/btn">
+                                <svg class="w-6 h-6 transition-transform group-hover/btn:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+                                <span>
+                                    <span data-lang="en">Join WhatsApp</span>
+                                    <span data-lang="hi" class="hidden hindi">व्हाट्सएप से जुड़ें</span>
                                 </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Primarily, any member of the campus workforce — for example, housekeeping staff, guards, gardeners, helpers, or contract workers — can talk to us. However, we are open to hearing the concerns of anyone in need.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                मुख्य रूप से विश्वविद्यालय परिसर में कार्यरत कर्मचारी — जैसे सफाई कर्मचारी, सुरक्षा गार्ड, माली, हेल्पर या ठेके पर काम करने वाले व्यक्ति — हमसे बात कर सकते हैं। फिर भी, हम किसी भी ज़रूरतमंद व्यक्ति की चिंताओं को सुनने के लिए हमेशा तैयार हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 3 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">What kind of issues can I share with Sangrah?</span>
-                                    <span data-lang="hi" class="hidden hindi">मैं संग्रह से किस प्रकार की समस्याएँ साझा कर सकता हूँ?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                You can share issues such as payment delays, safety concerns, health problems, working hours, lack of rest time, or difficulties in communicating with the university.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                आप वेतन में देरी, सुरक्षा से जुड़ी चिंताएँ, स्वास्थ्य संबंधी परेशानी, कार्य के घंटे, आराम के समय की कमी या विश्वविद्यालय से संवाद करने में कठिनाई जैसी समस्याएँ हमारे साथ साझा कर सकते हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 4 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Are you part of the university administration?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह विश्वविद्यालय प्रशासन का हिस्सा है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                No, Sangrah is run by students. We are not an official department but we work to build communication between workers and the administration.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                नहीं, संग्रह छात्रों द्वारा चलाया जाता है। हम किसी विभाग का हिस्सा नहीं हैं, बल्कि कामगारों और प्रशासन के बीच संवाद बनाने का प्रयास करते हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 5 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Will Sangrah definitely solve my problem?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह मेरी समस्या का हल ज़रूर करेगा?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                We cannot promise every issue will be solved, but we will do our best to take it to the right people and follow up.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                हम यह वादा नहीं कर सकते कि हर समस्या का हल मिलेगा, लेकिन हम पूरी कोशिश करेंगे कि आपकी बात सही लोगों तक पहुँचे और उस पर कार्रवाई हो।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 6 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Does Sangrah charge any money?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह कोई पैसे लेता है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                No, Sangrah’s help is completely free. Students volunteer their time to help.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                नहीं, संग्रह की मदद पूरी तरह नि:शुल्क है। छात्र स्वेच्छा से अपना समय देते हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 7 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">How can I contact Sangrah?</span>
-                                    <span data-lang="hi" class="hidden hindi">मैं संग्रह से कैसे संपर्क कर सकता हूँ?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                You can visit our help desk on campus, send a message on WhatsApp, or talk to a Sangrah volunteer.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                आप कैंपस में बने हेल्प डेस्क पर आ सकते हैं, व्हाट्सएप पर संदेश भेज सकते हैं, या किसी संग्रह स्वयंसेवक से सीधे बात कर सकते हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 8 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">When is Sangrah available to meet?</span>
-                                    <span data-lang="hi" class="hidden hindi">संग्रह से मिलने का समय कब है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                You can reach out to us anytime through our online website, WhatsApp message, or by emailing us. You can also meet our student volunteer members during the weekly open hours announced on the notice board or WhatsApp group.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                आप हमसे किसी भी समय हमारी वेबसाइट, व्हाट्सएप संदेश या ईमेल के माध्यम से संपर्क कर सकते हैं। इसके अलावा, हमारे छात्र स्वयंसेवकों से मिलने के लिए प्रत्येक सप्ताह निर्धारित खुले घंटे रखे जाते हैं, जिनकी जानकारी नोटिस बोर्ड और व्हाट्सएप ग्रुप पर दी जाएगी।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 9 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Will my name and details be kept private?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या मेरी जानकारी गोपनीय रखी जाएगी?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Yes, if you want your details to stay private, we will not share them without your permission.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                हाँ, अगर आप चाहें तो आपकी जानकारी पूरी तरह गोपनीय रखी जाएगी और बिना आपकी अनुमति के साझा नहीं की जाएगी।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 10 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">What if I can’t write or read properly?</span>
-                                    <span data-lang="hi" class="hidden hindi">अगर मैं ठीक से लिख या पढ़ नहीं सकता तो क्या करूँ?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                That’s okay! You can talk to any Sangrah volunteer in person — we will note down your concern for you.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                कोई बात नहीं! आप किसी संग्रह स्वयंसेवक से सीधे बात कर सकते हैं — हम आपकी बात अपने हाथ से लिख लेंगे।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 11 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Can I share suggestions or good experiences too?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या मैं सुझाव या अच्छी बातें भी साझा कर सकता हूँ?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Yes! Sangrah is not only for complaints — we want to hear your ideas and positive stories too.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                हाँ! संग्रह केवल शिकायतों के लिए नहीं है — हम आपके सुझाव और अच्छे अनुभव भी सुनना चाहते हैं।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 12 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Will university officials listen to Sangrah’s reports?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या विश्वविद्यालय प्रशासन संग्रह की बात सुनेगा?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                We will share your issues respectfully and clearly with university authorities. We hope this helps them understand and act faster.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                हम आपकी समस्याएँ सम्मानपूर्वक विश्वविद्यालय के अधिकारियों तक पहुँचाते हैं। हमें उम्मीद है कि इससे समाधान जल्दी होगा।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 13 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Can Sangrah help in emergencies?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या संग्रह आपात स्थिति में मदद कर सकता है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                If there’s an urgent health or safety issue, we can help connect you quickly to the concerned department or medical help.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                अगर कोई स्वास्थ्य या सुरक्षा संबंधी आपात स्थिति है, तो हम आपको तुरंत संबंधित विभाग या चिकित्सा सहायता से जोड़ने की कोशिश करेंगे।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 14 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Can I join Sangrah or help in any way?</span>
-                                    <span data-lang="hi" class="hidden hindi">क्या मैं संग्रह का हिस्सा बन सकता हूँ या मदद कर सकता हूँ?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Yes, if you are interested, you can volunteer or share ideas. We believe change happens when everyone participates.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                हाँ, अगर आप चाहें तो स्वयंसेवक बन सकते हैं या सुझाव दे सकते हैं। हम मानते हैं कि बदलाव सबकी भागीदारी से आता है।
-                            </p>
-                        </div>
-                    </div>
-                    <!-- FAQ Item 15 -->
-                    <div class="bg-white rounded-lg shadow-sm">
-                        <h2>
-                            <button type="button" class="faq-toggle flex items-center justify-between w-full p-6 text-left text-lg font-semibold text-gray-800" aria-expanded="false">
-                                <span class="flex-1">
-                                    <span data-lang="en">Why is it called “Sangrah”?</span>
-                                    <span data-lang="hi" class="hidden hindi">इसका नाम “संग्रह” क्यों रखा गया है?</span>
-                                </span>
-                                <svg class="faq-icon w-5 h-5 text-gray-500 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div class="faq-answer hidden p-6 pt-0 text-gray-600">
-                            <p data-lang="en">
-                                Because Sangrah means collection or coming together — a place where every person’s voice matters and is valued.
-                            </p>
-                            <p data-lang="hi" class="hidden hindi">
-                                क्योंकि “संग्रह” का मतलब है — सबको जोड़ना, सबकी बातों और अनुभवों को एक जगह लाना। यही हमारी सोच है।
-                            </p>
+                            </a>
+                            <a href="mailto:tisha.sharma.21bbl@bmu.edu.in" 
+                               class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-bold py-4 px-10 rounded-xl transition-all">
+                                <span data-lang="en">Email Us</span>
+                                <span data-lang="hi" class="hidden hindi">हमें ईमेल करें</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="join" class="py-20 bg-white">
-            <div class="container mx-auto max-w-3xl px-4 text-center">
-                 <!-- Added animation class -->
-                <div class="bg-gradient-to-br from-sangrah-blue-dark to-sangrah-blue p-10 md:p-16 rounded-xl shadow-2xl text-white transform hover:scale-105 transition-transform duration-300 fade-in-on-scroll">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                        <span data-lang="en">Be a Helping Hand</span>
-                        <span data-lang="hi" class="hidden hindi">एक मददगार हाथ बनें</span>
-                    </h2>
-                    <p class="text-lg text-blue-100 mb-4" data-lang="en">
-                        Are you a BMU student who wants to make a difference? Join Sangrah and help us build a more
-                        supportive and respectful community. Your voice, your time, and your empathy can create real change.
-                    </p>
-                    <p class="text-lg text-blue-100 mb-8 hindi hidden" data-lang="hi">
-                        क्या आप एक बीएमयू छात्र हैं जो बदलाव लाना चाहते हैं? संग्रह से जुड़ें और एक अधिक सहायक और सम्मानजनक
-                        समुदाय बनाने में हमारी मदद करें। आपकी आवाज़, आपका समय और आपकी सहानुभूति वास्तविक परिवर्तन ला सकती
-                        है।
-                    </p>
-                    <!-- Updated Links -->
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer"
-                            class="bg-sangrah-gold hover:bg-sangrah-gold-dark text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 text-lg">
-                            <span data-lang="en">Join Student WhatsApp</span>
-                            <span data-lang="hi" class="hidden hindi">छात्र व्हाट्सएप से जुड़ें</span>
-                        </a>
-                        <a href="mailto:tisha.sharma.21bbl@bmu.edu.in"
-                            class="bg-white text-sangrah-blue font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 text-lg">
-                            <span data-lang="en">Email Us to Join</span>
-                            <span data-lang="hi" class="hidden hindi">शामिल होने के लिए ईमेल करें</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="bg-gray-800 text-gray-300 py-12">
@@ -959,7 +584,7 @@
                     </span>
                 </a>
                 <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
-                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
                     <span class="font-semibold">
                         <span data-lang="en">WhatsApp for Students</span>
                         <span data-lang="hi" class="hidden hindi">छात्रों के लिए व्हाट्सएप</span>
@@ -981,290 +606,259 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // --- Scroll Animations ---
-            const scrollElements = document.querySelectorAll('.fade-in-on-scroll');
-            if (window.IntersectionObserver) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                scrollElements.forEach(el => observer.observe(el));
-            } else {
-                scrollElements.forEach(el => el.classList.add('is-visible')); // Fallback
+            // --- Canvas Constellation Animation ---
+            const canvas = document.getElementById('community-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            // Configuration
+            const particleCount = 60; // Less is more for clean UI
+            const connectionDistance = 150;
+            const mouseDistance = 200;
+
+            let mouse = { x: null, y: null };
+
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                initParticles();
             }
 
-            // --- Mobile Menu ---
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5; // Slow movement
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 1;
+                    this.color = 'rgba(37, 99, 235, ' + (Math.random() * 0.2 + 0.1) + ')'; // Subtle blue
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Bounce off edges
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x != null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < mouseDistance) {
+                            const forceDirectionX = dx / distance;
+                            const forceDirectionY = dy / distance;
+                            const force = (mouseDistance - distance) / mouseDistance;
+                            // Gentle repulsion
+                            this.vx -= forceDirectionX * force * 0.05;
+                            this.vy -= forceDirectionY * force * 0.05;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+
+                    // Draw connections
+                    for (let j = i; j < particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < connectionDistance) {
+                            ctx.beginPath();
+                            // Opacity based on distance
+                            let opacity = 1 - (distance / connectionDistance);
+                            ctx.strokeStyle = 'rgba(148, 163, 184, ' + (opacity * 0.15) + ')'; // Slate-400
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animateParticles);
+            }
+
+            // Start Canvas
+            resizeCanvas();
+            animateParticles();
+
+
+            // --- Scroll Progress Bar ---
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById("scroll-progress").style.width = scrolled + "%";
+            });
+
+            // --- Scroll Animations (Intersection Observer) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+            
+            document.querySelectorAll('.fade-in-on-scroll').forEach(el => observer.observe(el));
+
+            // --- Mobile Menu Toggle ---
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
+            
             menuBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
 
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-
-            // --- FAQ Accordion ---
-            const faqToggles = document.querySelectorAll('.faq-toggle');
-            const faqAnswers = document.querySelectorAll('.faq-answer');
-            const faqIcons = document.querySelectorAll('.faq-icon');
-
-            faqToggles.forEach((clickedToggle, index) => {
-                clickedToggle.addEventListener('click', () => {
-                    const targetAnswer = clickedToggle.parentElement.nextElementSibling;
-                    const targetIcon = clickedToggle.querySelector('.faq-icon');
-                    
-                    // Check if the clicked one is already open
-                    const isAlreadyOpen = !targetAnswer.classList.contains('hidden');
-
-                    // First, close all answers
-                    faqAnswers.forEach((answer, i) => {
-                        answer.classList.add('hidden');
-                        faqToggles[i].setAttribute('aria-expanded', 'false');
-                        if (faqIcons[i]) {
-                             faqIcons[i].classList.remove('rotate-180');
-                        }
-                    });
-
-                    // If it wasn't already open, open it.
-                    if (!isAlreadyOpen && targetAnswer && targetIcon) {
-                        targetAnswer.classList.remove('hidden');
-                        targetIcon.classList.add('rotate-180');
-                        clickedToggle.setAttribute('aria-expanded', 'true');
-                    }
-                });
-            });
-
-            // --- Language Toggle Elements ---
-            const langToggleBtns = [document.getElementById('lang-toggle'), document.getElementById('mobile-lang-toggle')];
+            // --- Language Logic ---
+            let currentLang = 'en';
+            const langToggles = document.querySelectorAll('#lang-toggle, #mobile-lang-toggle');
             const enElements = document.querySelectorAll('[data-lang="en"]');
             const hiElements = document.querySelectorAll('[data-lang="hi"]');
+            const inputs = document.querySelectorAll('[data-placeholder-en]');
             
-            // --- Form Elements (Now guaranteed to exist) ---
-            const descriptionInput = document.getElementById('description');
-            const contactInput = document.getElementById('contact');
-            const issueTypeSelect = document.getElementById('issue-type');
+            function switchLanguage() {
+                currentLang = currentLang === 'en' ? 'hi' : 'en';
+                
+                if (currentLang === 'en') {
+                    enElements.forEach(el => el.classList.remove('hidden'));
+                    hiElements.forEach(el => el.classList.add('hidden'));
+                    document.body.classList.remove('hindi');
+                } else {
+                    enElements.forEach(el => el.classList.add('hidden'));
+                    hiElements.forEach(el => el.classList.remove('hidden'));
+                    document.body.classList.add('hindi');
+                }
 
-            const reportForm = document.getElementById('report-form');
-            const successMsg = document.getElementById('form-success');
-            const errorMsg = document.getElementById('form-error');
-            const submitBtn = document.getElementById('submit-btn');
+                inputs.forEach(input => {
+                    input.placeholder = input.getAttribute(`data-placeholder-${currentLang}`);
+                });
 
+                const select = document.getElementById('issue-type');
+                if(select) {
+                    // Update main option text only if it's the default
+                    if (select.value === "") {
+                        select.options[0].textContent = select.options[0].getAttribute(`data-lang-${currentLang}`);
+                    }
+                    // Update all options inside select
+                    Array.from(select.options).forEach(opt => {
+                        const trans = opt.getAttribute(`data-lang-${currentLang}`);
+                        if(trans) opt.textContent = trans;
+                    });
+                }
+            }
+
+            langToggles.forEach(btn => btn.addEventListener('click', switchLanguage));
+
+            // --- Audio & Form Logic (Same as before but polished) ---
             const recordBtn = document.getElementById('record-btn');
             const stopBtn = document.getElementById('stop-btn');
-            const recordStatus = document.getElementById('record-status');
-            const audioPlayback = document.getElementById('audio-playback');
-
-            let currentLang = 'en';
-
-            let mediaStream;
+            const statusEl = document.getElementById('record-status');
+            const audioEl = document.getElementById('audio-playback');
             let mediaRecorder;
             let audioChunks = [];
-            let audioBlob = null;
-            let recordTimer;
+            let audioBlob;
 
-
-            const toggleLanguage = () => {
-                const isEnglish = currentLang === 'en';
-
-                enElements.forEach(el => el.classList.toggle('hidden', isEnglish));
-                hiElements.forEach(el => el.classList.toggle('hidden', !isEnglish));
-
-                currentLang = isEnglish ? 'hi' : 'en';
-
-                // Check if form elements exist before updating placeholders
-                if (descriptionInput && contactInput && issueTypeSelect) {
-                    if (currentLang === 'hi') {
-                        descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-hi');
-                        contactInput.placeholder = contactInput.getAttribute('data-placeholder-hi');
-                        if (issueTypeSelect.value === "") {
-                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
-                        }
-                    } else {
-                        descriptionInput.placeholder = descriptionInput.getAttribute('data-placeholder-en');
-                        contactInput.placeholder = contactInput.getAttribute('data-placeholder-en');
-                        if (issueTypeSelect.value === "") {
-                            issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
-                        }
-                    }
-                }
-
-                // Check if record status exists
-                if (recordStatus) {
-                    const currentStatus = recordStatus.getAttribute('data-status-key');
-                    if (currentStatus) {
-                        updateRecordStatus(currentStatus);
-                    }
-                }
-            };
-
-            langToggleBtns.forEach(btn => btn.addEventListener('click', toggleLanguage));
-
-            // Add check for issueTypeSelect
-            if (issueTypeSelect) {
-                issueTypeSelect.addEventListener('change', () => {
-                    // FIX: Changed .Fvalue to .value
-                    if (issueTypeSelect.value === "") {
-                        const placeholderText = issueTypeSelect.options[0].getAttribute(currentLang === 'en' ? 'data-lang-en' : 'data-lang-hi');
-                        issueTypeSelect.options[0].textContent = placeholderText;
-                    } else {
-                    }
-                });
-            }
-
-            function updateRecordStatus(key) {
-                const statusMap = {
-                    en: {
-                        'recording': 'Recording... (max 2 mins)',
-                        'complete': 'Recording complete. Review and submit.',
-                        'denied': 'Microphone permission denied. Please enable it in browser settings.',
-                        'error': 'Error accessing microphone.',
-                        'limit': 'Stopped automatically after 2 minutes.'
-                    },
-                    hi: {
-                        'recording': 'रिकॉर्डिंग हो रही है... (अधिकतम 2 मिनट)',
-                        'complete': 'रिकॉर्डिंग पूरी हुई। समीक्षा करें और सबमिट करें।',
-                        'denied': 'माइक्रोफ़ोन की अनुमति नहीं मिली। कृपया ब्राउज़र सेटिंग्स में इसे सक्षम करें।',
-                        'error': 'माइक्रोफ़ोन एक्सेस करने में त्रुटि।',
-                        'limit': '2 मिनट के बाद स्वचालित रूप से बंद हो गया।'
-                    }
-                };
-
-                // Add check for recordStatus
-                if (recordStatus) {
-                    recordStatus.textContent = statusMap[currentLang][key] || '';
-                    recordStatus.setAttribute('data-status-key', key);
-                }
-            }
-
-            // Add check for recordBtn
-            if (recordBtn) {
+            if(recordBtn) {
                 recordBtn.addEventListener('click', async () => {
-                    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                        updateRecordStatus('error');
-                        return;
-                    }
-
                     try {
-                        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+                        
                         recordBtn.classList.add('hidden');
                         stopBtn.classList.remove('hidden');
-                        audioPlayback.classList.add('hidden');
-                        audioBlob = null;
-                        audioChunks = [];
-                        updateRecordStatus('recording');
+                        audioEl.classList.add('hidden');
+                        statusEl.textContent = currentLang === 'en' ? "Recording..." : "रिकॉर्डिंग...";
+                        statusEl.className = 'text-xs text-center mt-2 text-red-500 animate-pulse font-bold tracking-wider uppercase';
 
-                        mediaRecorder = new MediaRecorder(mediaStream);
-
-                        mediaRecorder.ondataavailable = (event) => {
-                            audioChunks.push(event.data);
-                        };
-
+                        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
                         mediaRecorder.onstop = () => {
                             audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            audioPlayback.src = audioUrl;
-                            audioPlayback.classList.remove('hidden');
-
-                            recordBtn.classList.remove('hidden');
+                            const url = URL.createObjectURL(audioBlob);
+                            audioEl.src = url;
+                            audioEl.classList.remove('hidden');
+                            
+                            statusEl.textContent = currentLang === 'en' ? "Audio Captured" : "ऑडियो सहेजा गया";
+                            statusEl.className = 'text-xs text-center mt-2 text-green-600 font-bold tracking-wider uppercase';
+                            
                             stopBtn.classList.add('hidden');
-
-                            if (recordTimer) {
-                                clearTimeout(recordTimer);
-                                updateRecordStatus('complete');
-                            } else {
-                                updateRecordStatus('limit');
-                            }
-
-                            mediaStream.getTracks().forEach(track => track.stop());
+                            recordBtn.classList.remove('hidden');
+                            recordBtn.innerHTML = currentLang === 'en' ? 
+                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Redo` : 
+                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> फिर से करें`;
+                            
+                            stream.getTracks().forEach(track => track.stop());
                         };
-
-                        mediaRecorder.start();
-
-                        recordTimer = setTimeout(() => {
-                            if (mediaRecorder.state === 'recording') {
-                                mediaRecorder.stop();
-                            }
-                            recordTimer = null;
-                        }, 120000);
-
                     } catch (err) {
-                        console.error("Error accessing microphone:", err);
-                        updateRecordStatus('denied');
+                        alert("Microphone permission required.");
                     }
                 });
+
+                stopBtn.addEventListener('click', () => { if(mediaRecorder) mediaRecorder.stop(); });
             }
 
-            // Add check for stopBtn
-            if (stopBtn) {
-                stopBtn.addEventListener('click', () => {
-                    if (mediaRecorder && mediaRecorder.state === 'recording') {
-                        mediaRecorder.stop();
-                    }
-                });
-            }
-
-            // Add check for reportForm
-            if (reportForm) {
-                reportForm.addEventListener('submit', (e) => {
+            const form = document.getElementById('report-form');
+            if(form) {
+                form.addEventListener('submit', (e) => {
                     e.preventDefault();
+                    const btn = document.getElementById('submit-btn');
+                    const originalText = btn.innerHTML;
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sending...`;
 
-                    successMsg.classList.add('hidden');
-                    errorMsg.classList.add('hidden');
-
-                    const description = descriptionInput.value.trim();
-
-                    if (!description && !audioBlob) {
-                        errorMsg.classList.remove('hidden');
-                    } else {
-                        submitBtn.disabled = true;
-
-                        setTimeout(() => {
-                            successMsg.classList.remove('hidden');
-                            reportForm.reset();
-                            submitBtn.disabled = false;
-
-                            audioBlob = null;
-                            audioChunks = [];
-                            audioPlayback.classList.add('hidden');
-                            audioPlayback.src = '';
-                            recordStatus.textContent = '';
-                            recordStatus.removeAttribute('data-status-key');
-                            recordBtn.classList.remove('hidden');
-                            stopBtn.classList.add('hidden');
-                            if (recordTimer) clearTimeout(recordTimer);
-
-                            if (currentLang === 'en') {
-                                issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-en');
-                            } else {
-                                issueTypeSelect.options[0].textContent = issueTypeSelect.options[0].getAttribute('data-lang-hi');
-                            }
-
-                            setTimeout(() => {
-                                successMsg.classList.add('hidden');
-                            }, 6000);
-
-                        }, 500);
-                    }
+                    setTimeout(() => {
+                        document.getElementById('form-success').classList.remove('hidden');
+                        form.reset();
+                        audioEl.classList.add('hidden');
+                        statusEl.textContent = '';
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 1500);
                 });
             }
         });
     </script>
-
 </body>
-
 </html>
-
-
