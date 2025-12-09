@@ -41,6 +41,7 @@
                         'blob': 'blob 10s infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'shimmer': 'shimmer 2s linear infinite',
+                        'marquee': 'marquee 30s linear infinite',
                     },
                     keyframes: {
                         blob: {
@@ -56,6 +57,10 @@
                         shimmer: {
                             '0%': { transform: 'translateX(-100%)' },
                             '100%': { transform: 'translateX(100%)' }
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' } // Moves half the total width (since we double the content)
                         }
                     }
                 }
@@ -258,7 +263,7 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="relative pt-24 pb-36 lg:pt-40 lg:pb-48 overflow-hidden">
+        <section class="relative pt-24 pb-16 lg:pt-40 lg:pb-32 overflow-hidden">
             <div class="container mx-auto max-w-6xl px-4 text-center relative z-10">
                 <div class="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full bg-white/60 border border-white/80 text-sangrah-blue text-xs font-bold tracking-widest uppercase shadow-sm animate-float backdrop-blur-sm">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
@@ -433,6 +438,58 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animated Photo Queue / Gallery Section (MOVED HERE) -->
+        <section class="py-10 border-y border-white/40 bg-white/20 backdrop-blur-sm overflow-hidden relative group mb-24">
+            <div class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-[#f0f9ff] via-transparent to-[#f0f9ff]"></div>
+            
+            <!-- Scrolling Container -->
+            <div class="flex gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
+                <!-- 5 Placeholders (Original) -->
+                <!-- Item 1 -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="photoes/photo1.jpg" alt="Community Event 1" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 2 -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="photoes/photo2.jpg" alt="Worker Solidarity" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 3 -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="photoes/photo4.jpg" alt="Campus Life" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 4 -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="photoes/photo3.jpg" alt="Student Voice" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 5 -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="photoes/photo5.jpg" alt="SANGRAH Meet" class="w-full h-full object-cover">
+                </div>
+
+                <!-- 5 Placeholders (Clone for seamless loop) -->
+                <!-- Item 1 Clone -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="https://placehold.co/600x400/2563eb/white?text=Community+Event+1" alt="Community Event 1" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 2 Clone -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="https://placehold.co/600x400/f59e0b/white?text=Worker+Solidarity" alt="Worker Solidarity" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 3 Clone -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="https://placehold.co/600x400/10b981/white?text=Campus+Life" alt="Campus Life" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 4 Clone -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="https://placehold.co/600x400/ec4899/white?text=Student+Voice" alt="Student Voice" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 5 Clone -->
+                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
+                    <img src="https://placehold.co/600x400/8b5cf6/white?text=SANGRAH+Meet" alt="SANGRAH Meet" class="w-full h-full object-cover">
                 </div>
             </div>
         </section>
