@@ -29,6 +29,10 @@
                             DEFAULT: '#f59e0b', // amber-500
                             light: '#fcd34d',   // amber-300
                             dark: '#b45309',    // amber-700
+                        },
+                        'whatsapp': {
+                            DEFAULT: '#25D366',
+                            dark: '#128C7E',
                         }
                     },
                     fontFamily: {
@@ -38,17 +42,24 @@
                         'brand-hi': ['Eczar', 'serif'],
                     },
                     animation: {
-                        'blob': 'blob 10s infinite',
+                        'blob': 'blob 20s infinite',
+                        'blob-reverse': 'blob-reverse 25s infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'shimmer': 'shimmer 2s linear infinite',
-                        'marquee': 'marquee 30s linear infinite',
+                        'marquee': 'marquee 40s linear infinite', 
                     },
                     keyframes: {
                         blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '0%': { transform: 'translate(0px, 0px) scale(1) rotate(0deg)' },
+                            '33%': { transform: 'translate(50px, -50px) scale(1.2) rotate(120deg)' },
+                            '66%': { transform: 'translate(-30px, 40px) scale(0.8) rotate(240deg)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1) rotate(360deg)' },
+                        },
+                        'blob-reverse': {
+                            '0%': { transform: 'translate(0px, 0px) scale(1) rotate(0deg)' },
+                            '33%': { transform: 'translate(-50px, 50px) scale(1.1) rotate(-120deg)' },
+                            '66%': { transform: 'translate(30px, -40px) scale(0.9) rotate(-240deg)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1) rotate(-360deg)' },
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
@@ -60,7 +71,7 @@
                         },
                         marquee: {
                             '0%': { transform: 'translateX(0%)' },
-                            '100%': { transform: 'translateX(-50%)' } // Moves half the total width (since we double the content)
+                            '100%': { transform: 'translateX(-50%)' } 
                         }
                     }
                 }
@@ -75,7 +86,99 @@
             overflow-x: hidden;
         }
 
-        /* Canvas Background */
+        /* --- Loading Screen Styles --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+
+        #loading-screen.hidden-loader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-text {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .loader-subtext {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .loader-bar-container {
+            width: 200px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            margin-top: 2rem;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1s forwards;
+        }
+
+        .loader-bar {
+            height: 100%;
+            background: linear-gradient(to right, #2563eb, #f59e0b);
+            width: 0%;
+            animation: loadProgress 2.5s ease-in-out forwards;
+        }
+
+        /* NEW: Interactive 3D Wave Animation */
+        @keyframes wave-text {
+            0%, 100% {
+                transform: translateY(0);
+                color: #2563eb; /* Sangrah Blue */
+                text-shadow: 0 1px 0 #1e40af, 0 2px 0 #1e3a8a, 0 3px 0 #172554, 0 4px 0 #172554, 0 5px 0 #0f172a, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+            }
+            50% {
+                transform: translateY(-20px);
+                color: #f59e0b; /* Sangrah Gold */
+                text-shadow: 0 1px 0 #b45309, 0 2px 0 #92400e, 0 3px 0 #78350f, 0 4px 0 #78350f, 0 5px 0 #451a03, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+            }
+        }
+
+        .letter-wave {
+            display: inline-block;
+            animation: wave-text 1.2s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* Interactive: Pause and pop on hover */
+        .letter-wave:hover {
+            animation-play-state: paused;
+            transform: scale(1.3) translateY(-25px) !important;
+            color: #ec4899; /* Pop Color */
+            text-shadow: 0 10px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* --- Existing Styles --- */
         #community-canvas {
             position: fixed;
             top: 0;
@@ -83,8 +186,31 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            /* Gradient overlay on top of canvas for softness */
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(240,249,255,0.4));
+        }
+
+        /* Subtle Grid Pattern Overlay */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Gradient Mesh Overlay */
+        .bg-gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.7), rgba(240,249,255,0.2));
         }
 
         /* Ambient Blobs behind canvas */
@@ -92,9 +218,9 @@
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            z-index: -2;
-            opacity: 0.6;
-            animation: blob 10s infinite alternate;
+            z-index: -3;
+            opacity: 0.5;
+            will-change: transform;
         }
 
         .glass-nav {
@@ -171,14 +297,44 @@
 
 <body class="text-gray-800 antialiased selection:bg-sangrah-blue selection:text-white">
 
+    <!-- INITIAL LOADING SCREEN -->
+    <div id="loading-screen">
+        <div class="text-center z-10 px-4">
+            <!-- Staggered animation delays create the wave effect -->
+            <h1 class="loader-text text-4xl md:text-7xl font-black font-brand-en tracking-widest mb-4 flex justify-center gap-1 md:gap-3 select-none flex-wrap">
+                <span class="letter-wave" style="animation-delay: 0.0s">S</span>
+                <span class="letter-wave" style="animation-delay: 0.1s">A</span>
+                <span class="letter-wave" style="animation-delay: 0.2s">N</span>
+                <span class="letter-wave" style="animation-delay: 0.3s">G</span>
+                <span class="letter-wave" style="animation-delay: 0.4s">R</span>
+                <span class="letter-wave" style="animation-delay: 0.5s">A</span>
+                <span class="letter-wave" style="animation-delay: 0.6s">H</span>
+            </h1>
+            <p class="loader-subtext text-gray-400 text-sm md:text-lg font-medium tracking-[0.2em] md:tracking-[0.3em] uppercase">Where We Stand Together</p>
+            <div class="loader-bar-container mx-auto">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+        <!-- Decorative background blobs for loader -->
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-amber-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+    </div>
+
     <!-- Scroll Progress Bar -->
     <div id="scroll-progress"></div>
 
-    <!-- Animated Background Elements -->
+    <!-- Enhanced Background Stack -->
     <canvas id="community-canvas"></canvas>
-    <div class="ambient-blob w-96 h-96 bg-blue-300 top-0 left-0"></div>
-    <div class="ambient-blob w-96 h-96 bg-amber-200 bottom-0 right-0 animation-delay-2000"></div>
-    <div class="ambient-blob w-80 h-80 bg-pink-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animation-delay-4000"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient-overlay"></div>
+    
+    <!-- More Dynamic Blobs -->
+    <div class="ambient-blob w-96 h-96 bg-blue-300 top-[-10%] left-[-10%] animate-blob opacity-40"></div>
+    <div class="ambient-blob w-[30rem] h-[30rem] bg-amber-200 bottom-[-10%] right-[-5%] animate-blob-reverse animation-delay-2000 opacity-30"></div>
+    <div class="ambient-blob w-80 h-80 bg-pink-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-blob animation-delay-4000 opacity-40"></div>
+    <div class="ambient-blob w-64 h-64 bg-purple-300 top-[20%] right-[10%] animate-float animation-delay-1000 opacity-30"></div>
+    <div class="ambient-blob w-72 h-72 bg-green-200 bottom-[20%] left-[5%] animate-blob-reverse animation-delay-3000 opacity-30"></div>
+
 
     <!-- Navigation -->
     <header class="glass-nav sticky top-0 z-50 transition-all duration-300">
@@ -271,12 +427,12 @@
                     <span data-lang="hi" class="hidden hindi">समुदाय प्रथम पहल</span>
                 </div>
                 
-                <h1 class="text-6xl md:text-8xl font-black text-gray-900 leading-tight mb-8 tracking-tight drop-shadow-sm">
+                <h1 class="text-5xl md:text-8xl font-black text-gray-900 leading-tight mb-8 tracking-tight drop-shadow-sm">
                     <span data-lang="en">Support & <span class="text-transparent bg-clip-text bg-gradient-to-r from-sangrah-blue to-cyan-500">Solidarity</span></span>
                     <span data-lang="hi" class="hidden hindi"><span class="text-transparent bg-clip-text bg-gradient-to-r from-sangrah-blue to-cyan-500">समर्थन</span> और एकजुटता</span>
                 </h1>
                 
-                <p class="text-xl md:text-2xl text-gray-600 font-medium max-w-3xl mx-auto mb-12 leading-relaxed">
+                <p class="text-lg md:text-2xl text-gray-600 font-medium max-w-3xl mx-auto mb-12 leading-relaxed">
                     <span data-lang="en">We bridge the gap. Ensuring dignity, fair pay, and respect for every worker who makes our campus run.</span>
                     <span data-lang="hi" class="hidden hindi">हम खाई को पाटते हैं। हमारे कैंपस को चलाने वाले हर कार्यकर्ता के लिए सम्मान, उचित वेतन और आदर सुनिश्चित करना।</span>
                 </p>
@@ -301,13 +457,13 @@
         </section>
 
         <!-- Report Issue Section -->
-        <section id="report" class="py-24 relative">
+        <section id="report" class="py-16 md:py-24 relative">
             <div class="container mx-auto max-w-5xl px-4">
-                <div class="glass-card rounded-[2.5rem] p-8 md:p-14 shadow-2xl fade-in-on-scroll relative overflow-hidden">
+                <div class="glass-card rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-14 shadow-2xl fade-in-on-scroll relative overflow-hidden">
                     <!-- Decorative element -->
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-sangrah-blue via-purple-500 to-sangrah-gold"></div>
 
-                    <div class="grid md:grid-cols-2 gap-16">
+                    <div class="grid md:grid-cols-2 gap-10 md:gap-16">
                         <!-- Left Content -->
                         <div class="flex flex-col justify-center">
                             <div class="inline-flex items-center gap-2 text-amber-600 font-bold uppercase tracking-wider text-xs mb-6 bg-amber-50 px-3 py-1 rounded-lg w-fit">
@@ -315,11 +471,11 @@
                                 <span data-lang="en">100% Confidential</span>
                                 <span data-lang="hi" class="hidden hindi">100% गोपनीय</span>
                             </div>
-                            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                            <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                                 <span data-lang="en">Your Safety,<br>Our Priority.</span>
                                 <span data-lang="hi" class="hidden hindi">आपकी सुरक्षा,<br>हमारी प्राथमिकता।</span>
                             </h2>
-                            <p class="text-lg text-gray-600 mb-10 leading-relaxed">
+                            <p class="text-base md:text-lg text-gray-600 mb-10 leading-relaxed">
                                 <span data-lang="en">Facing issues with wages, respect, or safety? Tell us anonymously. We represent you without revealing your identity.</span>
                                 <span data-lang="hi" class="hidden hindi">वेतन, सम्मान या सुरक्षा के मुद्दों का सामना कर रहे हैं? हमें गुमनाम रूप से बताएं। हम आपकी पहचान उजागर किए बिना आपका प्रतिनिधित्व करते हैं।</span>
                             </p>
@@ -351,7 +507,7 @@
                         </div>
                         
                         <!-- Right Content (Form) -->
-                        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-xl relative">
+                        <div class="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white shadow-xl relative">
                             <form id="report-form" class="space-y-6">
                                 <!-- Success/Error Messages -->
                                 <div id="form-success" class="hidden p-4 bg-green-100 text-green-800 border border-green-200 rounded-xl text-sm flex items-start gap-3 shadow-inner">
@@ -442,40 +598,60 @@
             </div>
         </section>
 
-        <!-- Animated Photo Queue / Gallery Section (MOVED HERE) -->
-        <section class="py-10 border-y border-white/40 bg-white/20 backdrop-blur-sm overflow-hidden relative group mb-24">
+        <!-- Animated Photo Queue / Gallery Section -->
+        <section class="py-16 border-y border-white/40 bg-white/20 backdrop-blur-sm overflow-hidden relative group mb-24">
             <div class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-[#f0f9ff] via-transparent to-[#f0f9ff]"></div>
             
             <!-- Scrolling Container -->
-            <div class="flex gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
-                <!-- 5 Placeholders (Original) -->
+            <div class="flex gap-10 w-max animate-marquee hover:[animation-play-state:paused] items-center">
+                <!-- SET 1 (Original 5 - Sized Large) -->
                 <!-- Item 1 -->
-                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
-                    <img src="photoes/photo1.jpg" alt="Community Event 1" class="w-full h-full object-cover">
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo1.jpg" alt="1" class="w-full h-full object-cover">
                 </div>
                 <!-- Item 2 -->
-                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
-                    <img src="photoes/photo2.jpg" alt="Worker Solidarity" class="w-full h-full object-cover">
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo2.jpg" alt="2" class="w-full h-full object-cover">
                 </div>
                 <!-- Item 3 -->
-                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
-                    <img src="photoes/photo4.jpg" alt="Campus Life" class="w-full h-full object-cover">
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo5.jpg" alt="3" class="w-full h-full object-cover">
                 </div>
                 <!-- Item 4 -->
-                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
-                    <img src="photoes/photo3.jpg" alt="Student Voice" class="w-full h-full object-cover">
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo3.jpg" alt="4" class="w-full h-full object-cover">
                 </div>
                 <!-- Item 5 -->
-                <div class="w-80 h-52 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border-2 border-white/50 relative transform hover:scale-105 transition-all duration-300">
-                    <img src="photoes/photo5.jpg" alt="SANGRAH Meet" class="w-full h-full object-cover">
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo4.jpg" alt="5" class="w-full h-full object-cover">
                 </div>
 
-               
+                <!-- SET 2 (Clone of Set 1 for Loop) -->
+                <!-- Item 1 Clone -->
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo1.jpg" alt="1" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 2 Clone -->
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo2.jpg" alt="2" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 3 Clone -->
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo5.jpg" alt="3" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 4 Clone -->
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo4.jpg" alt="4" class="w-full h-full object-cover">
+                </div>
+                <!-- Item 5 Clone -->
+                <div class="w-[300px] h-[200px] md:w-[500px] md:h-[320px] flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/70 relative transform hover:scale-[1.02] transition-all duration-300">
+                    <img src="photoes/photo4.jpg" alt="5" class="w-full h-full object-cover">
+                </div>
             </div>
         </section>
 
         <!-- Values Section -->
-        <section class="py-24 relative overflow-hidden">
+        <section id="mission" class="py-24 relative overflow-hidden">
             <div class="container mx-auto max-w-6xl px-4 relative z-10">
                 <div class="text-center mb-20 fade-in-on-scroll">
                     <span class="text-sangrah-blue font-bold tracking-widest text-sm uppercase mb-2 block">Our DNA</span>
@@ -539,10 +715,112 @@
             </div>
         </section>
 
+        <!-- FAQ Section (NEW) -->
+        <section id="faq" class="py-24 relative">
+            <div class="container mx-auto max-w-6xl px-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-16 fade-in-on-scroll">
+                    <span data-lang="en">Frequently Asked Questions</span>
+                    <span data-lang="hi" class="hidden hindi">अक्सर पूछे जाने वाले प्रश्न</span>
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8 fade-in-on-scroll">
+                    <!-- Q1 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">01.</span>
+                            <span>
+                                <span data-lang="en">What is Sangrah?</span>
+                                <span data-lang="hi" class="hidden hindi">संग्रह क्या है?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">Sangrah is a student-led society started inside the university. Our aim is to understand the problems and needs of the working staff and help connect them with the right university departments.</span>
+                            <span data-lang="hi" class="hidden hindi">संग्रह विश्वविद्यालय के छात्रों द्वारा शुरू की गई एक संस्था है। इसका उद्देश्य विश्वविद्यालय में काम करने वाले कर्मचारियों की जरूरतों और समस्याओं को समझना और उन्हें सही विभाग तक पहुँचाने में मदद करना है।</span>
+                        </p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">02.</span>
+                            <span>
+                                <span data-lang="en">Who can reach out to Sangrah?</span>
+                                <span data-lang="hi" class="hidden hindi">संग्रह से कौन जुड़ सकता है?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">Any worker — housekeeping staff, guards, gardeners, helpers, or contract workers — can talk to us.</span>
+                            <span data-lang="hi" class="hidden hindi">कोई भी कर्मचारी — सफाई कर्मचारी, सुरक्षा गार्ड, माली, हेल्पर या ठेके पर काम करने वाला व्यक्ति — हमसे बात कर सकता है।</span>
+                        </p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">03.</span>
+                            <span>
+                                <span data-lang="en">What kind of issues can I share?</span>
+                                <span data-lang="hi" class="hidden hindi">मैं किस प्रकार की समस्या साझा कर सकता हूँ?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">You can share issues like payment delays, safety problems, health concerns, or difficulties in communicating with the university.</span>
+                            <span data-lang="hi" class="hidden hindi">आप वेतन में देरी, सुरक्षा की कमी, स्वास्थ्य संबंधी परेशानी या विश्वविद्यालय से बात करने में कठिनाई जैसी कोई भी समस्या हमारे साथ साझा कर सकते हैं।</span>
+                        </p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">04.</span>
+                            <span>
+                                <span data-lang="en">Are you part of the administration?</span>
+                                <span data-lang="hi" class="hidden hindi">क्या आप प्रशासन का हिस्सा हैं?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">No, Sangrah is run by students. We are not an official department but we work to build communication between workers and the administration.</span>
+                            <span data-lang="hi" class="hidden hindi">नहीं, संग्रह छात्रों द्वारा चलाया जाता है। हम किसी विभाग का हिस्सा नहीं हैं, बल्कि कामगारों और प्रशासन के बीच संवाद बनाने का प्रयास करते हैं।</span>
+                        </p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">05.</span>
+                            <span>
+                                <span data-lang="en">Will Sangrah solve my problem?</span>
+                                <span data-lang="hi" class="hidden hindi">क्या संग्रह मेरी समस्या का हल करेगा?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">We cannot promise every issue will be solved, but we will do our best to take it to the right people and follow up.</span>
+                            <span data-lang="hi" class="hidden hindi">हम यह वादा नहीं कर सकते कि हर समस्या का हल मिलेगा, लेकिन हम पूरी कोशिश करेंगे कि आपकी बात सही लोगों तक पहुँचे और उस पर कार्रवाई हो।</span>
+                        </p>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="glass-card p-8 rounded-2xl hover:shadow-lg transition-all duration-300">
+                        <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-start gap-3">
+                            <span class="text-sangrah-blue text-2xl">06.</span>
+                            <span>
+                                <span data-lang="en">Does Sangrah charge any money?</span>
+                                <span data-lang="hi" class="hidden hindi">क्या संग्रह कोई पैसे लेता है?</span>
+                            </span>
+                        </h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            <span data-lang="en">No, Sangrah’s help is completely free. Students volunteer their time to help.</span>
+                            <span data-lang="hi" class="hidden hindi">नहीं, संग्रह की मदद पूरी तरह नि:शुल्क है। छात्र स्वेच्छा से अपना समय देते हैं।</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Join CTA -->
-        <section id="join" class="py-24">
+        <section id="join" class="py-16 md:py-24">
             <div class="container mx-auto max-w-4xl px-4 text-center">
-                <div class="bg-gray-900 rounded-[2.5rem] p-12 md:p-24 shadow-2xl text-white transform hover:scale-[1.01] transition-transform duration-500 fade-in-on-scroll relative overflow-hidden group">
+                <div class="bg-gray-900 rounded-[2.5rem] p-8 md:p-24 shadow-2xl text-white transform hover:scale-[1.01] transition-transform duration-500 fade-in-on-scroll relative overflow-hidden group">
                     <!-- Hover Effect Background -->
                     <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div class="absolute -top-24 -right-24 w-64 h-64 bg-sangrah-blue rounded-full filter blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
@@ -552,14 +830,14 @@
                             <span data-lang="en">Be the Change.</span>
                             <span data-lang="hi" class="hidden hindi">बदलाव बनें।</span>
                         </h2>
-                        <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                        <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
                             <span data-lang="en">Your voice, time, and empathy can create a campus where everyone feels valued. Join the student movement today.</span>
                             <span data-lang="hi" class="hidden hindi">आपकी आवाज़, समय और सहानुभूति एक ऐसा कैंपस बना सकती है जहाँ हर कोई सम्मानित महसूस करे। आज ही छात्र आंदोलन में शामिल हों।</span>
                         </p>
                         <div class="flex flex-col sm:flex-row justify-center gap-5">
                             <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" 
-                               class="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 group/btn">
-                                <svg class="w-6 h-6 transition-transform group-hover/btn:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+                               class="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 group/btn">
+                                <svg class="w-6 h-6 transition-transform group-hover/btn:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
                                 <span>
                                     <span data-lang="en">Join WhatsApp</span>
                                     <span data-lang="hi" class="hidden hindi">व्हाट्सएप से जुड़ें</span>
@@ -613,15 +891,15 @@
 
             <!-- WhatsApp Links -->
             <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                <a href="https://chat.whatsapp.com/GmyJWMwAZq5DFsZwmtSZUl" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
+                <a href="https://chat.whatsapp.com/GmyJWMwAZq5DFsZwmtSZUl" target="_blank" rel="noopener noreferrer" class="bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
                     <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
                     <span class="font-semibold">
                         <span data-lang="en">WhatsApp for Workers</span>
                         <span data-lang="hi" class="hidden hindi">कार्यकर्ताओं के लिए व्हाट्सएप</span>
                     </span>
                 </a>
-                <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
-                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+                <a href="https://chat.whatsapp.com/IgmMaYhSgjBIng4fCekRCx" target="_blank" rel="noopener noreferrer" class="bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-lg shadow-lg flex items-center justify-center space-x-3 transition duration-300">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.46 3.48 1.32 4.95l-1.4 5.12 5.23-1.38c1.41.81 3 .24 4.76 1.24H12c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12 20.15c-1.67 0-3.24-.45-4.62-1.26l-.33-.2-3.44.9.92-3.35-.22-.34c-.88-1.38-1.33-2.98-1.33-4.66 0-4.52 3.68-8.2 8.2-8.2 4.52 0 8.2 3.68 8.2 8.2 0 4.52-3.69 8.2-8.2 8.2zm4.52-6.13c-.26-.13-1.55-.77-1.79-.85-.24-.08-.42-.13-.59.13-.17.26-.68.85-.83 1.02-.15.17-.3.19-.56.06-.26-.13-1.08-.39-2.06-1.27-.76-.68-1.27-1.52-1.42-1.78-.15-.26 0-.4.12-.52.11-.11.26-.26.39-.39.13-.13.17-.22.26-.37.08-.15.04-.29 0-.42-.04-.13-.59-1.42-.81-1.95-.22-.53-.44-.46-.59-.46-.15 0-.33-.04-.51-.04-.18 0-.46.06-.7.32-.24.26-.91.89-.91 2.17 0 1.28.94 2.52 1.06 2.7.12.17 1.81 2.78 4.38 3.87 1.6 .7 2.27.78 3.2.66.8-.11 1.55-.63 1.77-1.23.22-.6.22-1.11.15-1.23-.07-.13-.26-.2-.51-.33z"/></svg>
                     <span class="font-semibold">
                         <span data-lang="en">WhatsApp for Students</span>
                         <span data-lang="hi" class="hidden hindi">छात्रों के लिए व्हाट्सएप</span>
@@ -652,11 +930,12 @@
             let particles = [];
 
             // Configuration
-            const particleCount = 60; // Less is more for clean UI
-            const connectionDistance = 150;
-            const mouseDistance = 200;
+            const particleCount = 70; // Increased count
+            const connectionDistance = 160;
+            const mouseDistance = 250;
 
             let mouse = { x: null, y: null };
+            let parallax = { x: 0, y: 0 }; // Stores smoothed mouse position
 
             window.addEventListener('resize', resizeCanvas);
             window.addEventListener('mousemove', (e) => {
@@ -680,21 +959,44 @@
                 constructor() {
                     this.x = Math.random() * width;
                     this.y = Math.random() * height;
-                    this.vx = (Math.random() - 0.5) * 0.5; // Slow movement
-                    this.vy = (Math.random() - 0.5) * 0.5;
-                    this.size = Math.random() * 2 + 1;
-                    this.color = 'rgba(37, 99, 235, ' + (Math.random() * 0.2 + 0.1) + ')'; // Subtle blue
+                    
+                    // Depth property: 0 (background) to 1 (foreground)
+                    this.depth = Math.random(); 
+                    
+                    // Speed depends on depth (closer = faster)
+                    const speed = 0.5 + (this.depth * 0.5); 
+                    this.vx = (Math.random() - 0.5) * speed;
+                    this.vy = (Math.random() - 0.5) * speed;
+                    
+                    // Size depends on depth
+                    this.baseSize = Math.random() * 2 + 0.5;
+                    this.size = this.baseSize * (1 + this.depth);
+                    
+                    // Opacity depends on depth
+                    this.baseOpacity = 0.1 + (this.depth * 0.5);
+                    this.color = `rgba(37, 99, 235, ${this.baseOpacity})`; 
                 }
 
                 update() {
                     this.x += this.vx;
                     this.y += this.vy;
 
-                    // Bounce off edges
-                    if (this.x < 0 || this.x > width) this.vx *= -1;
-                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                    // Parallax Drift Effect based on Mouse
+                    if (mouse.x != null) {
+                        // Smoothly interpolate parallax target
+                        const targetX = (mouse.x - width/2) * 0.02 * (this.depth + 0.5);
+                        const targetY = (mouse.y - height/2) * 0.02 * (this.depth + 0.5);
+                        this.x -= targetX * 0.05; // Gentle push opposite to mouse
+                        this.y -= targetY * 0.05;
+                    }
 
-                    // Mouse Interaction
+                    // Wrap around edges
+                    if (this.x < 0) this.x = width;
+                    if (this.x > width) this.x = 0;
+                    if (this.y < 0) this.y = height;
+                    if (this.y > height) this.y = 0;
+
+                    // Mouse Interaction (Repulsion)
                     if (mouse.x != null) {
                         let dx = mouse.x - this.x;
                         let dy = mouse.y - this.y;
@@ -703,9 +1005,8 @@
                             const forceDirectionX = dx / distance;
                             const forceDirectionY = dy / distance;
                             const force = (mouseDistance - distance) / mouseDistance;
-                            // Gentle repulsion
-                            this.vx -= forceDirectionX * force * 0.05;
-                            this.vy -= forceDirectionY * force * 0.05;
+                            this.vx -= forceDirectionX * force * 0.03 * (this.depth + 0.5);
+                            this.vy -= forceDirectionY * force * 0.03 * (this.depth + 0.5);
                         }
                     }
                 }
@@ -732,18 +1033,22 @@
                     particles[i].update();
                     particles[i].draw();
 
-                    // Draw connections
+                    // Draw connections only between particles of similar depth or close proximity
                     for (let j = i; j < particles.length; j++) {
                         let dx = particles[i].x - particles[j].x;
                         let dy = particles[i].y - particles[j].y;
                         let distance = Math.sqrt(dx * dx + dy * dy);
 
-                        if (distance < connectionDistance) {
+                        // Only connect if they are relatively close in Z-depth too (simulated)
+                        let depthDiff = Math.abs(particles[i].depth - particles[j].depth);
+
+                        if (distance < connectionDistance && depthDiff < 0.3) {
                             ctx.beginPath();
-                            // Opacity based on distance
                             let opacity = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = 'rgba(148, 163, 184, ' + (opacity * 0.15) + ')'; // Slate-400
-                            ctx.lineWidth = 1;
+                            opacity *= (1 - depthDiff*2); // Fade connections between far layers
+                            
+                            ctx.strokeStyle = `rgba(148, 163, 184, ${opacity * 0.2})`; 
+                            ctx.lineWidth = 1 + particles[i].depth; // Thicker lines for closer particles
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
                             ctx.stroke();
@@ -845,13 +1150,25 @@
                         recordBtn.classList.add('hidden');
                         stopBtn.classList.remove('hidden');
                         audioEl.classList.add('hidden');
+                        // Reset audio source to stop playing previous
+                        audioEl.pause();
+                        audioEl.src = "";
+
                         statusEl.textContent = currentLang === 'en' ? "Recording..." : "रिकॉर्डिंग...";
                         statusEl.className = 'text-xs text-center mt-2 text-red-500 animate-pulse font-bold tracking-wider uppercase';
 
-                        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                        mediaRecorder.ondataavailable = e => {
+                            if (e.data.size > 0) {
+                                audioChunks.push(e.data);
+                            }
+                        };
+
                         mediaRecorder.onstop = () => {
+                            // Create blob from chunks
                             audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                             const url = URL.createObjectURL(audioBlob);
+                            
+                            // Setup playback
                             audioEl.src = url;
                             audioEl.classList.remove('hidden');
                             
@@ -861,17 +1178,23 @@
                             stopBtn.classList.add('hidden');
                             recordBtn.classList.remove('hidden');
                             recordBtn.innerHTML = currentLang === 'en' ? 
-                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Redo` : 
-                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> फिर से करें`;
+                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Redo Recording` : 
+                                `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> फिर से रिकॉर्ड करें`;
                             
+                            // Stop all tracks to release microphone
                             stream.getTracks().forEach(track => track.stop());
                         };
                     } catch (err) {
-                        alert("Microphone permission required.");
+                        console.error("Error accessing microphone:", err);
+                        alert("Could not access microphone. Please allow permissions.");
                     }
                 });
 
-                stopBtn.addEventListener('click', () => { if(mediaRecorder) mediaRecorder.stop(); });
+                stopBtn.addEventListener('click', () => { 
+                    if(mediaRecorder && mediaRecorder.state !== 'inactive') {
+                        mediaRecorder.stop(); 
+                    }
+                });
             }
 
             const form = document.getElementById('report-form');
@@ -895,6 +1218,28 @@
                     }, 1500);
                 });
             }
+
+            // --- Remove Loader ---
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loading-screen');
+                const minTime = 2500; // Minimum time to show the loader
+                const startTime = performance.now();
+
+                const hideLoader = () => {
+                    loader.classList.add('hidden-loader');
+                    // Remove from DOM after transition
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 800);
+                };
+
+                const elapsed = performance.now() - startTime;
+                if (elapsed < minTime) {
+                    setTimeout(hideLoader, minTime - elapsed);
+                } else {
+                    hideLoader();
+                }
+            });
         });
     </script>
 </body>
